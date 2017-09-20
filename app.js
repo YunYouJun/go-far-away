@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var pkg = require('./package');
+var common = require('./lib/common');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -14,6 +15,9 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
+//导航栏激活
+app.use(common.activeUrl);
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));

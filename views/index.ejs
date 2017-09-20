@@ -1,5 +1,29 @@
 <%- include('layout/header') %>
 
-<h1>Hello,Let's Go!</h1>
+<div class="ui segment">
+  <p>
+		<h1 class="text-center"><i class="marker icon"></i>Hello, Let's Go!</h1>
+		<div class="text-center">
+	    <div class="ui fluid stack right labeled left input">
+	    	<div class="ui dropdown label">
+	  	    <div class="text">北纬 / N</div>
+	  	    <i class="dropdown icon"></i>
+	  	    <div class="menu">
+	  	      <div class="item" value="N">北纬 / N</div>
+	  	      <div class="item" value="S">南纬 / S</div>
+	  	    </div>
+	    	</div>
+	      <input type="number" min="0" placeholder="输入度">
+				<div class="ui basic label">°</div>
+				<input type="number" min="0" placeholder="输入分">
+	      <div class="ui basic label">′</div>
+	      <input type="number" min="0" placeholder="输入秒">
+	      <div class="ui basic label">″</div>
+	      <div class="ui tag label">N</div>
+	    </div>
+    </div>
+
+  </p>
+</div>
 
 <%- include('layout/footer') %>
