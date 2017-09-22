@@ -7,7 +7,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/transform', function(req, res, next) {
-  res.render('transform', { title: '度分秒转换 Go-Far-Away' });
+  res.render('transform', { title: res.__('Transform')+' Go-Far-Away' });
 });
 
 router.get('/test', function(req, res, next) {

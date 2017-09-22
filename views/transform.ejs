@@ -4,41 +4,56 @@
   <p>
 		<h1 class="text-center">
 			<i class="compass icon"></i>
-			度分秒转换
+			<%= __('Unit Transform')%>
 		</h1>
 		<div class="ui divider"></div>
 
 	<div class="doubling stackable two column ui grid container">
 	  <div class="column">
     	<div class="ui fluid right labeled left input">
-  	  	<div class="ui label">纬度</div>
-  	  	<input type="number" min="0" placeholder="输入度数">
+  	  	<div class="ui label"><%= __('latitude') %></div>
+  	  	<input class="latitude" type="number" min="0" placeholder="<%= __('input degrees') %>">
   	  	<div class="ui tag label">°</div>
     	</div>
 	  </div>
 	  <div class="column">
     	<div class="ui fluid right labeled left input">
-  	  	<div class="ui label">经度</div>
-  	  	<input type="number" min="0" placeholder="输入度数">
+  	  	<div class="ui label"><%= __('longitude') %></div>
+  	  	<input class="longitude" type="number" min="0" placeholder="<%= __('input degrees') %>">
   	  	<div class="ui tag label">°</div>
     	</div>
 	  </div>
-  	<div class="sixteen wide column text-center">
-	  	<button class="ui secondary button fluid large">
-	  		<i class="exchange icon"></i> 转换
-	  	</button>
+	  <div class="sixteen wide column text-center">
+	  	<div class="ui fluid buttons">
+	  	  <button class="ui button" id="decimal2degree"><%- __('decimal')%> => <%- __('degree')%></button>
+	  	  <div class="or"></div>
+	  	  <button class="ui button" id="degree2decimal"><%- __('degree')%> => <%- __('decimal')%></button>
+	  	</div>
   	</div>
+	</div>
+
+	<div class="doubling stackable one column ui grid container">
 	  <div class="column">
-	    <div class="ui segment">Content</div>
+    	<div class="ui fluid right labeled left input">
+  	  	<div class="ui label"><%= __('latitude') %></div>
+  	  	<input class="latitude" type="number" min="0" placeholder="°">
+  	  	<div class="ui label">°</div>
+  	  	<input class="latitude" type="number" min="0" max="60" placeholder="′">
+  	  	<div class="ui label">′</div>
+  	  	<input class="latitude" type="number" min="0" max="60" placeholder="″">
+  	  	<div class="ui label">″</div>
+    	</div>
 	  </div>
 	  <div class="column">
-	    <div class="ui segment">Content</div>
-	  </div>
-	  <div class="column">
-	    <div class="ui segment">Content</div>
-	  </div>
-	  <div class="column">
-	    <div class="ui segment">Content</div>
+    	<div class="ui fluid right labeled left input">
+  	  	<div class="ui label"><%= __('longitude') %></div>
+  	  	<input class="longitude" type="number" min="0" placeholder="°">
+  	  	<div class="ui label">°</div>
+  	  	<input class="longitude" type="number" min="0" max="60" placeholder="′">
+  	  	<div class="ui label">′</div>
+  	  	<input class="longitude" type="number" min="0" max="60" placeholder="″">
+  	  	<div class="ui label">″</div>
+    	</div>
 	  </div>
 	</div>
 
