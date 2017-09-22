@@ -5,5 +5,23 @@ body {
 }
 
 a {
-  color: #00B7FF;
+  color: #000000;
+}
+
+.text-center{
+	text-align: center;
+}
+
+.item a:hover{
+	text-decoration: none;
+}
+
+.big-shadow{
+	box-shadow: 0px 0px 50px rgba(55,55,55,0.8) !important;
+}
+
+#allmap{
+	height:500px;
+	width:100%;
+	box-shadow: 5px 5px 20px rgba(55,55,55,0.5);
 }

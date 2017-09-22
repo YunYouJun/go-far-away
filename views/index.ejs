@@ -1,30 +1,98 @@
 <%- include('layout/header') %>
 
 <div class="ui segment">
-  <p>
 	<h1 class="text-center"><i class="marker icon"></i>Hello, Let's Go!</h1>
 	<div class="ui divider"></div>
-	<h1><%- getLocale() %></h1>
-	<div class="text-center">
-	  	<div class="ui dropdown label">
-		    <div class="text">北纬</div>
-		    <i class="dropdown icon"></i>
-		    <div class="menu">
-		      <div class="item" value="N">北纬</div>
-		      <div class="item" value="S">南纬</div>
-		    </div>
-	  	</div>
-	    <div class="ui fluid stack right labeled left input">
-	      <input type="number" min="0" placeholder="输入度">
-				<div class="ui basic label">°</div>
-				<input type="number" min="0" placeholder="输入分">
-	      <div class="ui basic label">′</div>
-	      <input type="number" min="0" placeholder="输入秒">
-	      <div class="ui basic label">″</div>
-	    </div>
-    </div>
 
-  </p>
+	<div class="doubling stackable two column ui grid container">
+    <div class="column">
+    	<div class="ui fluid right labeled left input">
+  	  	<input class="latitude" type="number" min="0" placeholder="<%= __('input degrees') %>">
+  	  		<div class="ui tag label top icon dropdown">
+  	  			<span class="text">° N (<%- __('north latitude') %>)</span>
+  	  		  <div class="menu">
+  	  		    <div class="item">
+  	  		      ° N (<%- __('north latitude') %>)
+  	  		    </div>
+  	  		    <div class="item">
+  	  		      ° S (<%- __('south latitude') %>)
+  	  		    </div>
+  	  		  </div>
+  	  		</div>
+    	</div>
+	  </div>
+	  <div class="column">
+    	<div class="ui fluid right labeled left input">
+  	  	<input class="longitude" type="number" min="0" placeholder="<%= __('input degrees') %>">
+
+  	  		<div class="ui tag label top icon dropdown">
+  	  			<span class="text">° E (<%- __('east longitude') %>)</span>
+  	  		  <div class="menu">
+  	  		    <div class="item">
+  	  		      ° E (<%- __('east longitude') %>)
+  	  		    </div>
+  	  		    <div class="item">
+  	  		      ° W (<%- __('west longitude') %>)
+  	  		    </div>
+  	  		  </div>
+  	  		</div>
+    	</div>
+	  </div>
+	</div>
+
+	<div class="text-center" style="padding: 50px;">
+		<button class="massive circular ui basic icon button big-shadow" type="submit" id="locate" data-tooltip="Let's Go!" data-inverted="">
+		  <i class="icon marker"></i>
+		</button>
+<!-- 		<button class="massive circular ui basic loading icon button">
+			<i class="icon marker"></i>
+		</button> -->
+	</div>
+
+	<div id="allmap"></div>
+
 </div>
 
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=k5Ml6vMgXxesl4jr0lmscvru5CNZrdQp"></script>
+<script type="text/javascript">
+// 百度地图API功能
+    var map = new BMap.Map("allmap");
+    map.centerAndZoom(new BMap.Point(116.331398,39.897445),10);
+    map.addControl(new BMap.NavigationControl());    
+    map.addControl(new BMap.ScaleControl());    
+    map.addControl(new BMap.OverviewMapControl());    
+    map.addControl(new BMap.MapTypeControl());
+    map.enableScrollWheelZoom(true);
+    
+    $('#locate').click(function(){
+    	theLocation();
+    });
+    // 用经纬度设置地图中心点
+    function theLocation(){
+        if($('.latitude').val() !== "" && $('.longitude').val() !== ""){
+            map.clearOverlays(); 
+            var new_point = new BMap.Point($('.longitude').val(),$('.latitude').val());
+            var marker = new BMap.Marker(new_point);  // 创建标注
+            map.addOverlay(marker);              // 将标注添加到地图中
+            map.panTo(new_point);      
+        }
+    }
+
+    // 浏览器定位
+    var geolocation = new BMap.Geolocation();
+  	geolocation.getCurrentPosition(function(r){
+  		if(this.getStatus() == BMAP_STATUS_SUCCESS){
+  			var mk = new BMap.Marker(r.point);
+  			map.addOverlay(mk);
+  			map.panTo(r.point);
+  			$('.latitude').val(r.point.lat);
+  			$('.longitude').val(r.point.lng);
+  		}
+  		else {
+  			alert('failed'+this.getStatus());
+  		}        
+  	},{enableHighAccuracy: true});
+</script>
+
+<%- include('layout/copyright') %>
 <%- include('layout/footer') %>

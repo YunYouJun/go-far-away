@@ -23,7 +23,7 @@ i18n.configure({
   cookie: 'go-far-away',
   queryParameter: 'lang',
   register: global,
-  autoReload: true,
+  // autoReload: true,
   extension: '.js',
   // where to store json files - defaults to './locales'
   directory: __dirname + '/locales'
