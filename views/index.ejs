@@ -1,15 +1,29 @@
 <%- include('layout/header') %>
 
 <div class="ui segment">
-	<h1 class="text-center"><i class="marker icon"></i>Hello, Let's Go!</h1>
+	<div class="text-center">
+		<button class="massive circular ui basic icon button" data-tooltip="获取当前位置" data-position="bottom center" data-inverted="" id="getCurLoc">
+		  <i class="icon marker"></i>
+		</button>
+		<button class="massive circular ui basic icon button" id="locate" data-tooltip="Let's Go!" data-position="bottom center" data-inverted="">
+		  <i class="icon compass"></i>
+		</button>
+	</div>
 	<div class="ui divider"></div>
 
 	<div class="doubling stackable two column ui grid container">
+		<div class="sixteen wide column">
+			<div class="ui fluid icon input" id="r-result">
+			  <input type="text" placeholder="Search..." id="suggestId">
+			  <i class="search icon"></i>
+			  <div id="searchResultPanel" style="height:auto; display:none;"></div>
+			</div>
+		</div>
     <div class="column">
     	<div class="ui fluid right labeled left input">
-  	  	<input class="latitude" type="number" min="0" placeholder="<%= __('input degrees') %>">
+  	  	<input class="latitude" type="number" min="0" max="90" placeholder="<%= __('input degrees') %>">
   	  		<div class="ui tag label top icon dropdown">
-  	  			<span class="text">° N (<%- __('north latitude') %>)</span>
+  	  			<span class="text" id="lat_txt">° N (<%- __('north latitude') %>)</span>
   	  		  <div class="menu">
   	  		    <div class="item">
   	  		      ° N (<%- __('north latitude') %>)
@@ -23,10 +37,10 @@
 	  </div>
 	  <div class="column">
     	<div class="ui fluid right labeled left input">
-  	  	<input class="longitude" type="number" min="0" placeholder="<%= __('input degrees') %>">
+  	  	<input class="longitude" type="number" min="0" max="180" placeholder="<%= __('input degrees') %>">
 
   	  		<div class="ui tag label top icon dropdown">
-  	  			<span class="text">° E (<%- __('east longitude') %>)</span>
+  	  			<span class="text" id="lng_txt">° E (<%- __('east longitude') %>)</span>
   	  		  <div class="menu">
   	  		    <div class="item">
   	  		      ° E (<%- __('east longitude') %>)
@@ -40,14 +54,13 @@
 	  </div>
 	</div>
 
-	<div class="text-center" style="padding: 50px;">
-		<button class="massive circular ui basic icon button big-shadow" type="submit" id="locate" data-tooltip="Let's Go!" data-inverted="">
-		  <i class="icon marker"></i>
-		</button>
-<!-- 		<button class="massive circular ui basic loading icon button">
+	<div class="ui divider"></div>
+
+<!-- 	<div class="text-center" style="padding: 50px;">
+		<button class="massive circular ui basic loading icon button">
 			<i class="icon marker"></i>
-		</button> -->
-	</div>
+		</button>
+	</div> -->
 
 	<div id="allmap"></div>
 
@@ -57,41 +70,136 @@
 <script type="text/javascript">
 // 百度地图API功能
     var map = new BMap.Map("allmap");
-    map.centerAndZoom(new BMap.Point(116.331398,39.897445),10);
+    map.centerAndZoom("北京",9);
     map.addControl(new BMap.NavigationControl());    
     map.addControl(new BMap.ScaleControl());    
     map.addControl(new BMap.OverviewMapControl());    
     map.addControl(new BMap.MapTypeControl());
     map.enableScrollWheelZoom(true);
-    
-    $('#locate').click(function(){
-    	theLocation();
+    // 浏览器定位
+    $('#getCurLoc').click(function(){
+    	$(this).removeAttr('data-tooltip');
+    	$(this).addClass('loading');
+    	getCurrentLocation();
     });
-    // 用经纬度设置地图中心点
-    function theLocation(){
-        if($('.latitude').val() !== "" && $('.longitude').val() !== ""){
-            map.clearOverlays(); 
-            var new_point = new BMap.Point($('.longitude').val(),$('.latitude').val());
-            var marker = new BMap.Marker(new_point);  // 创建标注
-            map.addOverlay(marker);              // 将标注添加到地图中
-            map.panTo(new_point);      
-        }
+    function getCurrentLocation(){
+  	  var geolocation = new BMap.Geolocation();
+  		geolocation.getCurrentPosition(function(r){
+  			if(this.getStatus() == BMAP_STATUS_SUCCESS){
+  				var mk = new BMap.Marker(r.point);
+  				map.addOverlay(mk);
+  				map.panTo(r.point);
+  				$('.latitude').val(r.point.lat);
+  				$('.longitude').val(r.point.lng);
+  				// 将地址解析为字符
+  				var geoc = new BMap.Geocoder();    
+					geoc.getLocation(r.point, function(rs){
+						var addComp = rs.addressComponents;
+						var address = addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber;
+						$('#suggestId').val(address);
+	    			$('#getCurLoc').attr('data-tooltip','当前位置：'+address);
+						$('#getCurLoc').removeClass('loading');
+					});        
+  			}
+  			else {
+  				alert('failed'+this.getStatus());
+  			}        
+  		},{enableHighAccuracy: true});
     }
 
-    // 浏览器定位
-    var geolocation = new BMap.Geolocation();
-  	geolocation.getCurrentPosition(function(r){
-  		if(this.getStatus() == BMAP_STATUS_SUCCESS){
-  			var mk = new BMap.Marker(r.point);
-  			map.addOverlay(mk);
-  			map.panTo(r.point);
-  			$('.latitude').val(r.point.lat);
-  			$('.longitude').val(r.point.lng);
+  	// 用经纬度设置地图中心点
+  	$('#locate').click(function(){
+  		theLocation();
+  	});
+  	function theLocation(){
+  		var lat;
+  		var lng;
+  		if($('#lat_txt').text().indexOf('N')!=-1){
+  			lat = $('.latitude').val();
+  		}else if($('#lat_txt').text().indexOf('S')!=-1){
+  			lat = - $('.latitude').val();
   		}
-  		else {
-  			alert('failed'+this.getStatus());
-  		}        
-  	},{enableHighAccuracy: true});
+  		if($('#lng_txt').text().indexOf('E')!=-1){
+  			lng = $('.longitude').val();
+  		}else if($('#lng_txt').text().indexOf('W')!=-1){
+  			lng = - $('.longitude').val();
+  		}
+
+	    if(lat !== "" && lng !== ""){
+	        map.clearOverlays(); 
+	        var new_point = new BMap.Point(lng,lat);
+	        var marker = new BMap.Marker(new_point);  // 创建标注
+	        map.addOverlay(marker);              // 将标注添加到地图中
+	        map.panTo(new_point);      
+	    }
+  	}
+
+  	var cur_lat = $('.latitude').val();
+  	var cur_lng = $('.longitude').val();
+
+  	function getFarthestCoordinate(latitude,longitude){
+  		far_lat = 0;
+  	}
+
+  	// ----------------------------------------------------------
+  	// 地图关键字输入框提示
+  	var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
+  		{"input" : "suggestId"
+  		,"location" : map
+  	});
+
+  	ac.addEventListener("onhighlight", function(e) {  //鼠标放在下拉列表上的事件
+  	var str = "";
+  		var _value = e.fromitem.value;
+  		var value = "";
+  		if (e.fromitem.index > -1) {
+  			value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+  		}    
+  		str = "FromItem<br />index = " + e.fromitem.index + "<br />value = " + value;
+  		
+  		value = "";
+  		if (e.toitem.index > -1) {
+  			_value = e.toitem.value;
+  			value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+  		}    
+  		str += "<br />ToItem<br />index = " + e.toitem.index + "<br />value = " + value;
+  		$("#searchResultPanel").innerHTML = str;
+  	});
+
+  	var myValue;
+  	ac.addEventListener("onconfirm", function(e) {    //鼠标点击下拉列表后的事件
+  	var _value = e.item.value;
+  		myValue = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+  		$("#searchResultPanel").innerHTML ="onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
+  		
+  		setPlace();
+  	});
+
+  	function setPlace(){
+  		map.clearOverlays();    //清除地图上所有覆盖物
+  		function myFun(){
+  			var pp = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
+  			map.centerAndZoom(pp, 18);
+  			map.addOverlay(new BMap.Marker(pp));    //添加标注
+  		}
+  		var local = new BMap.LocalSearch(map, { //智能搜索
+  		  onSearchComplete: myFun
+  		});
+  		local.search(myValue);
+  		// 创建地址解析器实例
+			var myGeo = new BMap.Geocoder();
+			// 将地址解析为经纬度 并显示
+			myGeo.getPoint(myValue, function(point){
+				if (point) {
+					$('.latitude').val(point.lat);
+					$('.longitude').val(point.lng);
+				}else{
+					alert("您选择地址没有解析到结果!");
+				}
+			}, "北京市");
+  	}
+  	// ----------------------------------------------------------
+
 </script>
 
 <%- include('layout/copyright') %>

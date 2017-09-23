@@ -25,6 +25,14 @@ $(".ui .button").click(
       $(this).addClass("secondary");
   }
 );
+// 回车出发Go按钮
+$(document).keydown(function(e){ 
+  if (!e)  
+    e = window.event;  
+  if ((e.keyCode || e.which) == 13) {  
+    $("#locate").click();  
+  }  
+});
 
 // 同步 经纬度 符号
 
