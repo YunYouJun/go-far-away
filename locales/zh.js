@@ -13,6 +13,7 @@
 	"east longitude": "东经",
 	"west longitude": "西经",
 	"About go-far-away and Me": "关于它与我",
+	"Let's go far away!": "让我们去远方吧！",
 
 	
 	"Hello": "你好"

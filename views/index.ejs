@@ -2,11 +2,14 @@
 
 <div class="ui segment">
 	<div class="text-center">
-		<button class="massive circular ui basic icon button" data-tooltip="获取当前位置" data-position="bottom center" data-inverted="" id="getCurLoc">
+		<button class="huge circular ui basic icon button" data-tooltip="自动获取当前位置" data-position="bottom center" data-inverted="" id="getCurLoc">
 		  <i class="icon marker"></i>
 		</button>
-		<button class="massive circular ui basic icon button" id="locate" data-tooltip="Let's Go!" data-position="bottom center" data-inverted="">
+		<button class="huge circular ui basic icon button" id="locate" data-tooltip="经纬度定位" data-position="bottom center" data-inverted="">
 		  <i class="icon compass"></i>
+		</button>
+		<button class="huge circular ui basic icon button" id="go-far-in-earth" data-tooltip="<%- __('Let\'s go far away!') %>" data-position="bottom center" data-inverted="">
+		  <i class="icon map signs"></i>
 		</button>
 	</div>
 	<div class="ui divider"></div>
@@ -76,7 +79,7 @@
     map.addControl(new BMap.OverviewMapControl());    
     map.addControl(new BMap.MapTypeControl());
     map.enableScrollWheelZoom(true);
-    // 浏览器定位
+    // 浏览器定位所在地
     $('#getCurLoc').click(function(){
     	$(this).removeAttr('data-tooltip');
     	$(this).addClass('loading');
@@ -97,7 +100,7 @@
 						var addComp = rs.addressComponents;
 						var address = addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber;
 						$('#suggestId').val(address);
-	    			$('#getCurLoc').attr('data-tooltip','当前位置：'+address);
+	    			$('#getCurLoc').attr('data-tooltip','所在地：'+address);
 						$('#getCurLoc').removeClass('loading');
 					});        
   			}
@@ -109,9 +112,6 @@
 
   	// 用经纬度设置地图中心点
   	$('#locate').click(function(){
-  		theLocation();
-  	});
-  	function theLocation(){
   		var lat;
   		var lng;
   		if($('#lat_txt').text().indexOf('N')!=-1){
@@ -124,21 +124,23 @@
   		}else if($('#lng_txt').text().indexOf('W')!=-1){
   			lng = - $('.longitude').val();
   		}
-
+  		theLocation(lat,lng);
+  	});
+  	function theLocation(lat,lng){
 	    if(lat !== "" && lng !== ""){
 	        map.clearOverlays(); 
 	        var new_point = new BMap.Point(lng,lat);
 	        var marker = new BMap.Marker(new_point);  // 创建标注
 	        map.addOverlay(marker);              // 将标注添加到地图中
 	        map.panTo(new_point);      
+  				// 将地址解析为字符
+  				var geoc = new BMap.Geocoder();    
+					geoc.getLocation(new_point, function(rs){
+						var addComp = rs.addressComponents;
+						var address = addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber;
+						$('#suggestId').val(address);
+					});    
 	    }
-  	}
-
-  	var cur_lat = $('.latitude').val();
-  	var cur_lng = $('.longitude').val();
-
-  	function getFarthestCoordinate(latitude,longitude){
-  		far_lat = 0;
   	}
 
   	// ----------------------------------------------------------
@@ -199,6 +201,18 @@
 			}, "北京市");
   	}
   	// ----------------------------------------------------------
+	//去这个地球上最远的地方！
+	$('#go-far-in-earth').click(function(){
+		var cur_lat = $('.latitude').val();
+		var cur_lng = $('.longitude').val();
+		getFarthestInEarth(cur_lat,cur_lng);
+	});
+
+  	function getFarthestInEarth(latitude,longitude){
+  		var go_lat = -latitude;
+  		var go_lng = -(180-longitude);
+  		theLocation(go_lat,go_lng);
+  	}
 
 </script>
 
