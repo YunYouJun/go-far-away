@@ -14,5 +14,9 @@
 	"About go-far-away and Me": "About go-far-away and Me",
 	"south latitude": "south latitude",
 	"east longitude": "east longitude",
-	"west longitude": "west longitude"
+	"west longitude": "west longitude",
+	"Let's go far away!": "Let's go far away!",
+	"The farthest city in China.": "The farthest city in China.",
+	"Google Map": "Google Map",
+	"Baidu Map": "Baidu Map"
 }

@@ -7,11 +7,11 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/transform', function(req, res, next) {
-  res.render('transform', { title: res.__('Transform')+' Go-Far-Away' });
+  res.render('transform', { title: res.__('Transform')+' | Go-Far-Away' });
 });
 
 router.get('/test', function(req, res, next) {
-  res.render('test/hello', { title: 'Go-Far-Away' });
+  res.render('test/google-map', { title: 'Go-Far-Away' });
 });
 
 module.exports = router;

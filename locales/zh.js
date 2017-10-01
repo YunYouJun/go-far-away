@@ -14,6 +14,9 @@
 	"west longitude": "西经",
 	"About go-far-away and Me": "关于它与我",
 	"Let's go far away!": "让我们去远方吧！",
+	"The farthest city in China.": "在中国内最远的城市。",
+	"Baidu Map": "百度地图",
+	"Google Map": "谷歌地图",
 
 	
 	"Hello": "你好"

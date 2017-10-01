@@ -37,6 +37,16 @@ $(document).keydown(function(e){
 // 同步 经纬度 符号
 
 
+// 获取url参数
+function getQueryString(name) {
+  var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+  var r = window.location.search.substr(1).match(reg);
+  if (r != null) {
+      return unescape(r[2]);
+  }
+  return null;
+}
+
 // 度分秒单位转换
 // 小数 to 度分秒
 function decimal2degree(decimal){
