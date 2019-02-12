@@ -8100,6 +8100,11 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
+vue-cli-plugin-vuetify@^0.4.6:
+  version "0.4.6"
+  resolved "http://registry.npm.taobao.org/vue-cli-plugin-vuetify/download/vue-cli-plugin-vuetify-0.4.6.tgz#91c4534d17bc04bbd6f41eacdb6ff49be0f59f2b"
+  integrity sha1-kcRTTRe8BLvW9B6s22/0m+D1nys=
+
 vue-eslint-parser@^2.0.3:
   version "2.0.3"
   resolved "http://registry.npm.taobao.org/vue-eslint-parser/download/vue-eslint-parser-2.0.3.tgz#c268c96c6d94cfe3d938a5f7593959b0ca3360d1"
@@ -8170,6 +8175,18 @@ vue@^2.5.22:
   version "2.6.5"
   resolved "http://registry.npm.taobao.org/vue/download/vue-2.6.5.tgz#7a7e8723b875b91800e576aac41cb3ed325dddf0"
   integrity sha1-en6HI7h1uRgA5XaqxByz7TJd3fA=
+
+vuetify-loader@^1.0.5:
+  version "1.2.1"
+  resolved "http://registry.npm.taobao.org/vuetify-loader/download/vuetify-loader-1.2.1.tgz#7b4724d9566ad4c400dec69d0192b83af0924c63"
+  integrity sha1-e0ck2VZq1MQA3sadAZK4OvCSTGM=
+  dependencies:
+    loader-utils "^1.1.0"
+
+vuetify@^1.3.0:
+  version "1.5.0"
+  resolved "http://registry.npm.taobao.org/vuetify/download/vuetify-1.5.0.tgz#b7334f525b5dd416b01d5e9ddbadad22beeb9d7f"
+  integrity sha1-tzNPUltd1BawHV6d262tIr7rnX8=
 
 watchpack@^1.5.0:
   version "1.6.0"
