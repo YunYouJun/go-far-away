@@ -15,12 +15,12 @@
           {{ name }}
         </h1>
         <p class="display-1 font-weight-light">
-          {{ description }}
+          {{ $t('description') }}
         </p>
       </v-flex>
 
       <v-flex xs12>
-        <v-btn>
+        <v-btn dark round to="/go">
           {{ $t("Let's go far away!") }}
         </v-btn>
       </v-flex>

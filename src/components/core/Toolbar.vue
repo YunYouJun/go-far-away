@@ -16,17 +16,15 @@
     </v-toolbar-title>
     <v-spacer></v-spacer>
     <v-toolbar-items>
-      <v-btn flat style="min-width: 48px">
-        <v-icon>location_searching</v-icon>
-        <span class="ml-2 hidden-sm-and-down">{{
-          $t('menu["Location Search"]')
-        }}</span>
-      </v-btn>
-      <v-btn flat style="min-width: 48px">
-        <v-icon>transform</v-icon>
-        <span class="ml-2 hidden-sm-and-down">{{
-          $t('menu["Unit Transform"]')
-        }}</span>
+      <v-btn
+        v-for="toolItem in toolItems"
+        :key="toolItem.to"
+        flat
+        :to="toolItem.to"
+        style="min-width: 48px"
+      >
+        <v-icon>{{ toolItem.icon }}</v-icon>
+        <span class="ml-2 hidden-sm-and-down">{{ $t(toolItem.label) }}</span>
       </v-btn>
       <locales />
     </v-toolbar-items>
@@ -38,6 +36,22 @@ import locales from '@/components/core/Locales'
 export default {
   components: {
     locales
+  },
+  data() {
+    return {
+      toolItems: [
+        {
+          icon: 'location_searching',
+          label: 'menu["Location Search"]',
+          to: '/go'
+        },
+        {
+          icon: 'transform',
+          label: 'menu["Unit Transform"]',
+          to: '/unit'
+        }
+      ]
+    }
   }
 }
 </script>

@@ -1,4 +1,6 @@
+import en from 'vuetify/es5/locale/en'
 export default {
+  $vuetify: en,
   'Baidu Map': 'Baidu Map',
   Transform: 'Transform',
   latitude: 'latitude',
@@ -8,14 +10,28 @@ export default {
   Language: 'Language',
   decimal: 'decimal',
   degree: 'degree',
+  description:
+    "Go to the farthest place. Then you'll always be on your way home.",
+  form: {
+    address: {
+      label: 'Your Address',
+      hint: 'Click the location icon to get auto position'
+    }
+  },
+  geographic: {
+    latitude: {
+      north: 'North Latitude',
+      south: 'South Latitude'
+    },
+    longitude: {
+      east: 'East Longitude',
+      west: 'West Longitude'
+    }
+  },
   menu: {
     'Location Search': 'Location Search',
     'Unit Transform': 'Unit Transform'
   },
-  'north latitude': 'north latitude',
-  'south latitude': 'south latitude',
-  'east longitude': 'east longitude',
-  'west longitude': 'west longitude',
   "Let's go far away!": "Let's go far away!",
   'The farthest city in China.': 'The farthest city in China.',
   'Google Map': 'Google Map'

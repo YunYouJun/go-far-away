@@ -43,5 +43,7 @@ Base on:
 
 Base on:
 
-- ejs 模板渲染
+- express
+- ejs
 - 百度地图
+- JQuery
