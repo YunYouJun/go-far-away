@@ -9,13 +9,14 @@
               prepend-icon="location_city"
               :items="autocomplete"
               :label="$t('form.address.label')"
-              item-text="name"
-              item-value="name"
               :search-input.sync="curPosition.address"
               :placeholder="curPosition.address"
               :aria-placeholder="curPosition.address"
+              clearable
               dense
               hide-no-data
+              item-text="name"
+              item-value="name"
               persistent-hint
               :hint="searchHint"
               return-object
@@ -34,7 +35,9 @@
                 </v-list-tile-content>
               </template>
               <v-slide-x-reverse-transition slot="append-outer" mode="out-in">
-                <v-icon :color="isLocated ? 'success' : 'info'" @click="doSome"
+                <v-icon
+                  :color="isLocated ? 'success' : 'info'"
+                  @click="getCurPositionByBrowser"
                   >location_on</v-icon
                 >
               </v-slide-x-reverse-transition>
@@ -65,7 +68,7 @@
         </v-layout>
       </v-container>
     </v-form>
-    <amap-wrapper />
+    <amap-wrapper @lnglat="setCurLnglat" @addressHint="setAddressHint" />
   </div>
 </template>
 
@@ -83,8 +86,8 @@ export default {
       curPosition: {
         address: '',
         location: {
-          lat: 39.90923,
-          lng: 116.397428
+          lat: 0,
+          lng: 0
         }
       },
       isLocated: true
@@ -106,6 +109,9 @@ export default {
     }
   },
   methods: {
+    setAddressHint(address) {
+      this.formattedAddress = address
+    },
     setCurLnglat(location) {
       this.curPosition.location = location
     },
@@ -119,9 +125,6 @@ export default {
           console.log(obj)
         }
       }
-    },
-    doSome() {
-      console.log('do')
     }
   }
 }

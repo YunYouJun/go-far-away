@@ -15,7 +15,7 @@ export default {
   form: {
     address: {
       label: '您的地址',
-      hint: '点击图标获取自动定位地址'
+      hint: '点击图标获取精确定位地址（需要浏览器支持）'
     }
   },
   geographic: {

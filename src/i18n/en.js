@@ -15,7 +15,7 @@ export default {
   form: {
     address: {
       label: 'Your Address',
-      hint: 'Click the location icon to get auto position'
+      hint: 'Click the location icon to get accurate position'
     }
   },
   geographic: {

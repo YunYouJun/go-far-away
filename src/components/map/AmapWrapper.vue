@@ -5,7 +5,6 @@
       :vid="'amap-vue'"
       :amap-manager="amapManager"
       :animateEnable="true"
-      :center="center"
       :plugin="plugins"
       :lang="lang"
       :resizeEnable="true"
@@ -31,54 +30,29 @@ export default {
     let self = this
     return {
       amapManager,
-      center: [116.397428, 39.90923],
+      center: [],
       loaded: false,
       markers: [],
       events: {
         init: o => {
-          self.map = o
-          // this.$emit('location', o.getCenter())
+          let oCenter = o.getCenter()
+          self.center = [oCenter.lng, oCenter.lat]
+          self.$emit('lnglat', oCenter)
           o.getCity(result => {
-            console.log(result)
-            this.$emit(
-              'address',
+            self.formattedAddress =
               result.province + result.city + result.district
-            )
+            self.$emit('addressHint', self.formattedAddress)
           })
-          self.addMarker(o.getCenter())
+          self.addMarker(oCenter)
         }
       },
-      plugins: [
-        {
-          pName: 'Autocomplete',
-          events: {
-            init(o) {
-              self.autoComplete = o
-            }
-          }
-        },
-        // {
-        //   pName: 'Geolocation',
-        //   buttonPosition: 'RB',
-        //   events: {
-        //     init(o) {
-        //       o.getCurrentPosition((status, result) => {
-        //         console.log(status)
-        //         console.log(result)
-        //         if (result && result.position) {
-        //           self.lng = result.position.lng
-        //           self.lat = result.position.lat
-        //           self.center = [self.lng, self.lat]
-        //           self.loaded = true
-        //         }
-        //       })
-        //     }
-        //   }
-        // },
-        'MapType',
-        'Scale',
-        'ToolBar'
-      ]
+      plugins: ['MapType', 'Scale', 'ToolBar']
+    }
+  },
+  watch: {
+    center(val) {
+      let map = this.amapManager.getMap()
+      map.setCenter(val)
     }
   },
   computed: {
@@ -87,8 +61,13 @@ export default {
     }
   },
   created() {
+    this.map = this.amapManager.getMap()
     this.initAutoComplete()
     this.initPlaceSearch()
+    this.initGeolocation()
+  },
+  mounted() {
+    this.getLnglatByAddress(this.formattedAddress)
   },
   methods: {
     displayLocationMarker(poi) {
@@ -177,6 +156,36 @@ export default {
           map: self.map
         })
         self.placeSearch = placeSearch
+      })
+    },
+    initGeolocation() {
+      let self = this
+      lazyAMapApiLoaderInstance.load().then(() => {
+        AMap.plugin('AMap.Geolocation', function() {
+          let geolocation = new AMap.Geolocation({
+            showButton: false,
+            zoomToAccuracy: true
+          })
+          self.geolocation = geolocation
+        })
+      })
+    },
+    // 浏览器定位
+    getCurPositionByBrowser() {
+      let self = this
+      let map = this.amapManager.getMap()
+      map.addControl(this.geolocation)
+      this.geolocation.getCurrentPosition(function(status, result) {
+        if (status == 'complete') {
+          self.setCurLnglat(result.position)
+          self.formattedAddress = result.formattedAddress
+          let poi = {
+            location: result.position
+          }
+          self.displayLocationMarker(poi)
+        } else {
+          console.log(result)
+        }
       })
     }
   }
