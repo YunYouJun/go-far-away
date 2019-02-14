@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueAMap from 'vue-amap'
+import { lazyAMapApiLoaderInstance } from 'vue-amap'
 
 Vue.use(VueAMap)
 VueAMap.initAMapApiLoader({
@@ -7,6 +8,7 @@ VueAMap.initAMapApiLoader({
   plugin: [
     'Autocomplete',
     'CircleEditor',
+    'Geocoder',
     'Geolocation',
     'MapType',
     'OverView',
@@ -16,4 +18,8 @@ VueAMap.initAMapApiLoader({
     'ToolBar'
   ],
   v: '1.4.12'
+})
+
+lazyAMapApiLoaderInstance.load().then(() => {
+  // your code ...
 })

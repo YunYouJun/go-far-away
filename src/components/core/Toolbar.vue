@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar app>
+  <v-toolbar app style="z-index:2000;">
     <router-link :to="{ name: 'home' }">
       <v-img
         alt="Logo"
