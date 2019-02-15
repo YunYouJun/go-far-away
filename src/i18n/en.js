@@ -32,6 +32,12 @@ export default {
     'Location Search': 'Location Search',
     'Unit Transform': 'Unit Transform'
   },
+  unit: {
+    m: 'M',
+    degree: 'Degree',
+    minute: 'Minute',
+    second: 'Second'
+  },
   "Let's go far away!": "Let's go far away!",
   'The farthest city in China.': 'The farthest city in China.',
   'Google Map': 'Google Map'

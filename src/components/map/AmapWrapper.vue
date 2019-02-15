@@ -183,6 +183,7 @@ export default {
             location: result.position
           }
           self.displayLocationMarker(poi)
+          self.isLocated = true
         } else {
           console.log(result)
         }

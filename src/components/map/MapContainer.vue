@@ -51,6 +51,7 @@
               max="180"
               min="-180"
               required
+              :hint="oldLocation.lat"
               @change="getAddressByLnglat"
             ></v-text-field>
           </v-flex>
@@ -62,8 +63,19 @@
               max="180"
               min="-180"
               required
+              :hint="oldLocation.lng"
               @change="getAddressByLnglat"
             ></v-text-field>
+          </v-flex>
+          <v-flex xs12 v-if="distance">
+            <div class="text-xs-center">
+              <v-chip color="indigo" text-color="white">
+                <v-avatar>
+                  <v-icon>timeline</v-icon>
+                </v-avatar>
+                {{ distance + ' ' + $t('unit.m') }}
+              </v-chip>
+            </div>
           </v-flex>
         </v-layout>
       </v-container>
@@ -82,6 +94,7 @@ export default {
   data() {
     return {
       autocomplete: [],
+      distance: '',
       formattedAddress: '',
       curPosition: {
         address: '',
@@ -90,7 +103,11 @@ export default {
           lng: 0
         }
       },
-      isLocated: true
+      oldLocation: {
+        lat: null,
+        lng: null
+      },
+      isLocated: false
     }
   },
   computed: {
@@ -108,11 +125,21 @@ export default {
       }
     }
   },
+  created() {
+    this.bus.$on('goFarAway', () => {
+      this.getFarthestInEarth(this.curPosition.location)
+    })
+    this.bus.$on('getAccurateLocation', () => {
+      this.getCurPositionByBrowser()
+    })
+  },
   methods: {
     setAddressHint(address) {
       this.formattedAddress = address
     },
     setCurLnglat(location) {
+      this.oldLocation.lng = this.curPosition.location.lng.toString()
+      this.oldLocation.lat = this.curPosition.location.lat.toString()
       this.curPosition.location = location
     },
     searchPlace(obj) {
@@ -125,6 +152,61 @@ export default {
           console.log(obj)
         }
       }
+    },
+    getFarthestInEarth(location) {
+      let lng = location.lng
+      let lat = location.lat
+      let go_lat = -lat
+      let go_lng
+      if (lng <= 0) {
+        go_lng = lng + 180
+      } else if (lng > 0) {
+        go_lng = lng - 180
+      }
+      let goLocation = {
+        lng: go_lng,
+        lat: go_lat
+      }
+      this.setCurLnglat(goLocation)
+      this.getAddressByLnglat()
+      let map = this.amapManager.getMap()
+      map.setZoom(3)
+      let curLnglat = [location.lng, location.lat]
+      let goLnglat = [goLocation.lng, goLocation.lat]
+      this.distance = this.formatDistance(
+        AMap.GeometryUtil.distance(curLnglat, goLnglat)
+      )
+    },
+    formatDistance(num, n = 2) {
+      // n 精确位数
+      num = num.toFixed(n)
+      let sub_val = num
+        .split('.')[0]
+        .split('')
+        .reverse()
+      let sub_xs = num.split('.')[1]
+
+      let distance = ''
+      for (let i = 0; i < sub_val.length; i++) {
+        distance +=
+          sub_val[i] + ((i + 1) % 3 === 0 && i + 1 != sub_val.length ? ',' : '')
+      }
+
+      if (n === 0) {
+        distance = distance
+          .split('')
+          .reverse()
+          .join('')
+      } else {
+        distance =
+          distance
+            .split('')
+            .reverse()
+            .join('') +
+          '.' +
+          sub_xs
+      }
+      return distance
     }
   }
 }

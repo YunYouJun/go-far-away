@@ -32,7 +32,12 @@ export default {
     'Location Search': '定位寻找',
     'Unit Transform': '单位转换'
   },
-
+  unit: {
+    m: '米',
+    degree: '度',
+    minute: '分',
+    second: '秒'
+  },
   "Let's go far away!": '让我们去远方吧！',
   'The farthest city in China.': '在中国内最远的城市。',
   'Google Map': '谷歌地图'

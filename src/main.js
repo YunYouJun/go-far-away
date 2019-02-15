@@ -8,6 +8,8 @@ import i18n from './i18n'
 
 Vue.config.productionTip = false
 
+Vue.prototype.bus = new Vue()
+
 new Vue({
   i18n,
   router,
