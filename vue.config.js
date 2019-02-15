@@ -8,7 +8,9 @@ module.exports = {
 }
 
 if (process.env.NODE_ENV === 'production') {
-  module.exports.plugins = (module.exports.plugins || []).concat([
+  module.exports.configureWebpack.plugins = (
+    module.exports.configureWebpack.plugins || []
+  ).concat([
     new PrerenderSPAPlugin({
       // Required - The path to the webpack-outputted app to prerender.
       staticDir: path.join(__dirname, 'dist'),
