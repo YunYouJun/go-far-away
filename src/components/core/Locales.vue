@@ -1,7 +1,7 @@
 <template>
   <v-menu attach bottom left offset-y>
     <v-btn slot="activator" flat style="min-width: 48px">
-      <v-icon class="mr-2 hidden-sm-and-down">language</v-icon>
+      <v-icon class="mr-2 hidden-sm-and-down">translate</v-icon>
       <v-img
         :src="
           `https://cdn.vuetifyjs.com/images/flags/${

@@ -8,6 +8,9 @@ import i18n from './i18n'
 
 Vue.config.productionTip = false
 
+import Toast from '@/components/core/toast'
+Vue.prototype.$toast = Toast
+
 Vue.prototype.bus = new Vue()
 
 new Vue({

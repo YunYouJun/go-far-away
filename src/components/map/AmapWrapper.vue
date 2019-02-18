@@ -184,9 +184,19 @@ export default {
           }
           self.displayLocationMarker(poi)
           self.isLocated = true
+          self.$toast.open({
+            color: 'success',
+            title: result.info,
+            text: result.message
+          })
         } else {
-          console.log(result)
+          self.$toast.open({
+            color: 'error',
+            title: result.info,
+            text: result.message
+          })
         }
+        self.isLoading = false
       })
     }
   }

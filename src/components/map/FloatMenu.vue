@@ -10,6 +10,16 @@
     <v-btn fab dark small color="indigo" @click="getAccurateLocation">
       <v-icon>my_location</v-icon>
     </v-btn>
+    <v-btn
+      fab
+      dark
+      small
+      color="blue-grey"
+      href="https://baike.baidu.com/item/旅行者1号探测器"
+      target="_blank"
+    >
+      <v-icon>track_changes</v-icon>
+    </v-btn>
   </v-speed-dial>
 </template>
 

@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div class="text-xs-center" v-if="isLoading">
+      <v-progress-circular indeterminate color="red"></v-progress-circular>
+    </div>
     <v-form>
       <v-container>
         <v-layout wrap>
@@ -107,6 +110,7 @@ export default {
         lat: null,
         lng: null
       },
+      isLoading: false,
       isLocated: false
     }
   },
@@ -130,6 +134,7 @@ export default {
       this.getFarthestInEarth(this.curPosition.location)
     })
     this.bus.$on('getAccurateLocation', () => {
+      this.isLoading = true
       this.getCurPositionByBrowser()
     })
   },
@@ -148,8 +153,10 @@ export default {
           this.formattedAddress = obj.district + obj.address + obj.name
           this.getPlaceBySearch(obj)
         } else {
-          console.log('no obj')
-          console.log(obj)
+          this.$toast.open({
+            color: 'warning',
+            text: '请选中您的地址~'
+          })
         }
       }
     },
