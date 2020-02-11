@@ -7,6 +7,7 @@ let showing = false
 export { Toast }
 export default {
   open(params) {
+    // eslint-disable-next-line no-console
     if (!params.text) return console.error('[toast] no text supplied')
     if (!params.type) params.type = 'info'
 
