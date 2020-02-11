@@ -30,7 +30,7 @@
 - [ ] 去远方
   - [x] 地球上距离自己最远的地方
     - [x] 显示距离
-    <!-- - [ ] 显示连线 -->
+      <!-- - [ ] 显示连线 -->
   - [ ] 指定国家距离自己最远的地方
   - [ ] 国内距离自己最远的地方
 - [ ] 全局消息提示
@@ -38,21 +38,3 @@
 ## Intend
 
 - [ ] the farthest place in the universe
-
-## CHANGELOG
-
-### 1.0.0 （2019-02-12）
-
-Base on:
-
-- Vue
-- 高德地图
-
-### [0.1.0](https://github.com/YunYouJun/go-far-away) （2017-09-22）
-
-Base on:
-
-- express
-- ejs
-- 百度地图
-- JQuery

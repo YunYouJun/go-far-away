@@ -1,9 +1,11 @@
 <template>
   <v-speed-dial v-model="fab" fixed bottom right>
-    <v-btn slot="activator" v-model="fab" dark fab>
-      <v-icon>menu</v-icon>
-      <v-icon>close</v-icon>
-    </v-btn>
+    <template v-slot:activator>
+      <v-btn v-model="fab" dark fab color="blue darken-2">
+        <v-icon v-if="fab">close</v-icon>
+        <v-icon v-else>menu</v-icon>
+      </v-btn>
+    </template>
     <v-btn fab dark small color="green" @click="goFarAway">
       <v-icon>golf_course</v-icon>
     </v-btn>

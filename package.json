@@ -1,51 +1,48 @@
 {
   "name": "go-far-away",
   "version": "0.1.0",
-  "description": "Go to the farthest place. Then you'll always be on your way home.",
   "private": true,
+  "description": "Go to the farthest place. Then you'll always be on your way home.",
+  "author": "YunYouJun",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "register-service-worker": "^1.5.2",
-    "vue": "^2.5.22",
-    "vue-amap": "^0.5.8",
-    "vue-i18n": "^8.8.1",
-    "vue-router": "^3.0.1",
-    "vuetify": "^1.5.1"
+    "core-js": "^3.6.4",
+    "register-service-worker": "^1.6.2",
+    "vue": "^2.6.11",
+    "vue-amap": "^0.5.10",
+    "vue-i18n": "^8.15.3",
+    "vue-router": "^3.1.5",
+    "vuetify": "^2.2.11"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.4.0",
-    "@vue/cli-plugin-eslint": "^3.4.0",
-    "@vue/cli-plugin-pwa": "^3.4.0",
-    "@vue/cli-service": "^3.4.0",
-    "@vue/eslint-config-prettier": "^5.0.0",
-    "babel-eslint": "^10.0.1",
-    "eslint": "^6.1.0",
-    "eslint-plugin-prettier": "^3.1.0",
-    "eslint-plugin-vue": "^5.0.0",
-    "lint-staged": "^9.2.0",
-    "stylus": "^0.54.5",
-    "stylus-loader": "^3.0.2",
-    "vue-cli-plugin-vuetify": "^0.5.0",
-    "vue-template-compiler": "^2.5.21",
-    "vuetify-loader": "^1.0.5"
+    "@vue/cli-plugin-babel": "^4.2.2",
+    "@vue/cli-plugin-eslint": "^4.2.2",
+    "@vue/cli-plugin-pwa": "^4.2.2",
+    "@vue/cli-service": "^4.2.2",
+    "@vue/eslint-config-prettier": "^6.0.0",
+    "babel-eslint": "^10.0.3",
+    "eslint": "^6.8.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-vue": "^6.1.2",
+    "lint-staged": "^10.0.7",
+    "sass": "^1.19.0",
+    "sass-loader": "^8.0.2",
+    "vue-cli-plugin-vuetify": "^2.0.4",
+    "vue-template-compiler": "^2.6.11",
+    "vuetify-loader": "^1.4.3"
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
   },
+  "license": "MIT",
   "lint-staged": {
-    "*.js": [
-      "vue-cli-service lint",
-      "git add"
-    ],
-    "*.vue": [
+    "*.{js,vue}": [
       "vue-cli-service lint",
       "git add"
     ]
-  },
-  "author": "YunYouJun",
-  "license": "MIT"
+  }
 }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3 class="display-2 text-xs-center mt-4">
+    <h3 class="display-2 text-center mt-5">
       {{ $t('menu["Unit Transform"]') }}
     </h3>
     <v-form>

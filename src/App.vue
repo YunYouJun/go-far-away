@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <toolbar />
+    <app-bar />
     <v-content>
       <router-view />
     </v-content>
@@ -9,19 +9,13 @@
 </template>
 
 <script>
-import Toolbar from './components/core/Toolbar'
+import AppBar from './components/core/AppBar'
 import AppFooter from './components/core/AppFooter'
-
 export default {
   name: 'App',
   components: {
-    AppFooter,
-    Toolbar
-  },
-  data() {
-    return {
-      //
-    }
+    AppBar,
+    AppFooter
   }
 }
 </script>

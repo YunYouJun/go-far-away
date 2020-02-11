@@ -1,33 +1,33 @@
 <template>
-  <v-menu attach bottom left offset-y>
-    <v-btn slot="activator" flat style="min-width: 48px">
-      <v-icon class="mr-2 hidden-sm-and-down">translate</v-icon>
-      <v-img
-        :src="
-          `https://cdn.vuetifyjs.com/images/flags/${
-            currentLanguage.country
-          }.png`
-        "
-        width="26px"
-      />
-    </v-btn>
+  <v-menu left bottom>
+    <template v-slot:activator="{ on }">
+      <v-btn v-on="on" slot="activator" text>
+        <v-icon class="mr-2 hidden-sm-and-down">mdi-translate</v-icon>
+        <v-img
+          :src="
+            `https://cdn.vuetifyjs.com/images/flags/${currentLanguage.country}.png`
+          "
+          width="26px"
+        />
+      </v-btn>
+    </template>
     <v-list dense light>
-      <v-list-tile
+      <v-list-item
         v-for="language in languages"
         :key="language.locale"
         avatar
         @click="translateI18n(language)"
       >
-        <v-list-tile-avatar tile size="24px">
+        <v-list-item-icon>
           <v-img
             :src="
               `https://cdn.vuetifyjs.com/images/flags/${language.country}.png`
             "
             width="24px"
           />
-        </v-list-tile-avatar>
-        <v-list-tile-title v-text="language.name" />
-      </v-list-tile>
+        </v-list-item-icon>
+        <v-list-item-title v-text="language.name" />
+      </v-list-item>
     </v-list>
   </v-menu>
 </template>

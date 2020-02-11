@@ -1,30 +1,30 @@
 <template>
   <v-container>
-    <v-layout text-xs-center wrap>
-      <v-flex xs12>
+    <v-row class="text-center">
+      <v-col cols="12">
         <v-img
           :src="require('../assets/logo.svg')"
           class="my-3"
           contain
           height="200"
         ></v-img>
-      </v-flex>
+      </v-col>
 
-      <v-flex xs12>
+      <v-col>
         <h1 class="display-3 mb-3 font-weight-light text-uppercase">
           {{ name }}
         </h1>
-        <p class="display-1 font-weight-light">
+        <p class="display-1 font-weight-light pt-3">
           {{ $t('description') }}
         </p>
-      </v-flex>
+      </v-col>
 
-      <v-flex xs12>
-        <v-btn dark round to="/go">
+      <v-col cols="12">
+        <v-btn dark rounded to="/go">
           {{ $t("Let's go far away!") }}
         </v-btn>
-      </v-flex>
-    </v-layout>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
