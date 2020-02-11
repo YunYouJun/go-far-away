@@ -5,5 +5,11 @@ module.exports = {
       errors: true
     }
   },
-  transpileDependencies: ['vuetify']
+  transpileDependencies: ['vuetify'],
+  pwa: {
+    workboxOptions: {
+      skipWaiting: true,
+      clientsClaim: true
+    }
+  }
 }
