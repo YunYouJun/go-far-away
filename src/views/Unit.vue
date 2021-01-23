@@ -13,10 +13,10 @@
 </template>
 
 <script>
-import UnitTransform from '@/components/unit/UnitTransform'
+import UnitTransform from "@/components/unit/UnitTransform";
 export default {
   components: {
-    UnitTransform
-  }
-}
+    UnitTransform,
+  },
+};
 </script>

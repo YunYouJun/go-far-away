@@ -14,6 +14,7 @@
       :key="toolItem.to"
       :to="toolItem.to"
       text
+      class="mr-2"
     >
       <v-icon>{{ toolItem.icon }}</v-icon>
       <span class="ml-2 hidden-sm-and-down">{{ $t(toolItem.label) }}</span>
@@ -23,28 +24,26 @@
 </template>
 
 <script>
-import locales from '@/components/core/Locales'
+import locales from "@/components/core/Locales";
 export default {
   components: {
-    locales
+    locales,
   },
   data() {
     return {
       toolItems: [
         {
-          icon: 'location_searching',
+          icon: "location_searching",
           label: 'menu["Location Search"]',
-          to: '/go'
+          to: "/go",
         },
         {
-          icon: 'transform',
+          icon: "transform",
           label: 'menu["Unit Transform"]',
-          to: '/unit'
-        }
-      ]
-    }
-  }
-}
+          to: "/unit",
+        },
+      ],
+    };
+  },
+};
 </script>
-
-<style></style>

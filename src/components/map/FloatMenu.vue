@@ -31,17 +31,17 @@ export default {
     fab: false,
     fling: false,
     tabs: null,
-    left: false
+    left: false,
   }),
   methods: {
     goFarAway() {
-      this.bus.$emit('goFarAway')
+      this.bus.$emit("goFarAway");
     },
     getAccurateLocation() {
-      this.bus.$emit('getAccurateLocation')
-    }
-  }
-}
+      this.bus.$emit("getAccurateLocation");
+    },
+  },
+};
 </script>
 
 <style></style>

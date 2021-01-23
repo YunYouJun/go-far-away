@@ -16,53 +16,53 @@
 
 <script>
 export default {
-  name: 'Toast',
+  name: "Toast",
   props: {
     title: {
       type: String,
-      default: ''
+      default: "",
     },
     text: {
       type: String,
-      default: ''
+      default: "",
     },
     type: {
       type: String,
-      default: ''
+      default: "",
     },
     options: {
       type: Object,
       default: () => {
-        return {}
-      }
-    }
+        return {};
+      },
+    },
   },
   data() {
     return {
-      open: false
-    }
+      open: false,
+    };
   },
   watch: {
-    open: function(val) {
+    open: function (val) {
       if (!val) {
-        this.close()
+        this.close();
       }
-    }
+    },
   },
   beforeMount() {
-    document.querySelector('#app').appendChild(this.$el)
+    document.querySelector("#app").appendChild(this.$el);
   },
   mounted() {
-    this.open = true
+    this.open = true;
   },
   methods: {
     close() {
-      if (this.open) this.open = false
+      if (this.open) this.open = false;
       setTimeout(() => {
-        this.$options.onClose()
-        this.$destroy()
-      }, 700) // wait for close animation
-    }
-  }
-}
+        this.$options.onClose();
+        this.$destroy();
+      }, 700); // wait for close animation
+    },
+  },
+};
 </script>

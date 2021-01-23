@@ -28,46 +28,49 @@
 
       <v-card-text class="font-weight-light">
         2017 - {{ new Date().getFullYear() }} &copy;
-        <strong>{{ name }} - {{ author }}</strong>
+        <strong
+          >{{ name }} -
+          <a :href="author.url" target="_blank">{{ author.name }}</a></strong
+        >
       </v-card-text>
     </v-card>
   </v-footer>
 </template>
 
 <script>
-import pkg from '@/../package.json'
+import pkg from "@/../package.json";
 export default {
   data: () => ({
     name: pkg.name,
     author: pkg.author,
     description: pkg.description,
-    version: 'v' + pkg.version,
+    version: "v" + pkg.version,
     links: [
       {
-        color: 'black',
-        href: 'https://github.com/YunYouJun/go-far-away/',
-        icon: 'iconfont icon-github',
-        tooltip: 'GitHub Source Code'
+        color: "black",
+        href: "https://github.com/YunYouJun/go-far-away/",
+        icon: "iconfont icon-github",
+        tooltip: "GitHub Source Code",
       },
       {
-        color: 'red',
-        href: 'https://weibo.com/jizhideyunyoujun',
-        icon: 'iconfont icon-weibo',
-        tooltip: 'Weibo: 机智的云游君'
+        color: "red",
+        href: "https://weibo.com/jizhideyunyoujun",
+        icon: "iconfont icon-weibo",
+        tooltip: "Weibo: 机智的云游君",
       },
       {
-        color: 'blue',
-        href: 'mailto:me@yunyoujun.cn',
-        icon: 'iconfont icon-email',
-        tooltip: 'Email: me@yunyoujun.cn'
+        color: "blue",
+        href: "mailto:me@yunyoujun.cn",
+        icon: "iconfont icon-email",
+        tooltip: "Email: me@yunyoujun.cn",
       },
       {
-        color: 'indigo',
-        href: 'https://yunyoujun.cn',
-        icon: 'iconfont icon-globe',
-        tooltip: 'Blog: yunyoujun.cn'
-      }
-    ]
-  })
-}
+        color: "indigo",
+        href: "https://yunyoujun.cn",
+        icon: "iconfont icon-globe",
+        tooltip: "Blog: yunyoujun.cn",
+      },
+    ],
+  }),
+};
 </script>

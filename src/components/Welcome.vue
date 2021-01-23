@@ -15,12 +15,12 @@
           {{ name }}
         </h1>
         <p class="display-1 font-weight-light pt-3">
-          {{ $t('description') }}
+          {{ $t("description") }}
         </p>
       </v-col>
 
       <v-col cols="12">
-        <v-btn dark rounded to="/go">
+        <v-btn large dark rounded to="/go">
           {{ $t("Let's go far away!") }}
         </v-btn>
       </v-col>
@@ -29,13 +29,13 @@
 </template>
 
 <script>
-import { name, description } from '@/../package.json'
+import { name, description } from "@/../package.json";
 export default {
   data: () => ({
     name: name,
-    description: description
-  })
-}
+    description: description,
+  }),
+};
 </script>
 
 <style></style>

@@ -1,21 +1,21 @@
 <template>
   <v-app>
     <app-bar />
-    <v-content>
+    <v-main>
       <router-view />
-    </v-content>
+    </v-main>
     <app-footer />
   </v-app>
 </template>
 
 <script>
-import AppBar from './components/core/AppBar'
-import AppFooter from './components/core/AppFooter'
+import AppBar from "./components/core/AppBar";
+import AppFooter from "./components/core/AppFooter";
 export default {
-  name: 'App',
+  name: "App",
   components: {
     AppBar,
-    AppFooter
-  }
-}
+    AppFooter,
+  },
+};
 </script>

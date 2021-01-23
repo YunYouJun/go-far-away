@@ -1,15 +1,16 @@
 module.exports = {
+  publicPath: "/go-far-away/",
   devServer: {
     overlay: {
       warnings: true,
-      errors: true
-    }
+      errors: true,
+    },
   },
-  transpileDependencies: ['vuetify'],
+  transpileDependencies: ["vuetify"],
   pwa: {
     workboxOptions: {
       skipWaiting: true,
-      clientsClaim: true
-    }
-  }
-}
+      clientsClaim: true,
+    },
+  },
+};
