@@ -4,7 +4,6 @@ import VueAMap, { lazyAMapApiLoaderInstance } from "vue-amap";
 Vue.use(VueAMap);
 
 const key = process.env.VUE_APP_AMAP_KEY;
-console.log(key);
 VueAMap.initAMapApiLoader({
   key,
   plugin: [
