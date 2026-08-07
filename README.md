@@ -1,8 +1,10 @@
 # go-far-away 去远方
 
-[![Build Status](https://travis-ci.com/YunYouJun/go-far-away.svg?branch=master)](https://travis-ci.com/YunYouJun/go-far-away)
+[![CI and deploy](https://github.com/YunYouJun/go-far-away/actions/workflows/ci.yml/badge.svg)](https://github.com/YunYouJun/go-far-away/actions/workflows/ci.yml)
 
 > Go the farthest place.
+
+[Preview](https://yunyoujun.github.io/go-far-away/)
 
 定位个人所在地，或通过输入经纬度的方式，计算出世界上距离自己最远的地方。（~~地球不完全是圆的这种细节，就不要在意啦！~~）
 
@@ -33,7 +35,45 @@
       <!-- - [ ] 显示连线 -->
   - [ ] 指定国家距离自己最远的地方
   - [ ] 国内距离自己最远的地方
-- [ ] 全局消息提示
+- [x] 全局消息提示
+- [x] PWA 离线应用壳
+
+## Development
+
+需要 Node.js `^20.19.0 || >=22.12.0`。
+
+```bash
+npm ci
+cp .env.example .env.local
+npm run dev
+```
+
+在高德开放平台创建 Web 端 JS API Key，将其写入 `.env.local`：
+
+```dotenv
+VITE_AMAP_KEY=your_amap_web_key
+VITE_AMAP_SECURITY_CODE=your_amap_security_code
+```
+
+请为 Key 配置可用域名白名单，避免被第三方滥用并耗尽配额。Key 属于浏览器端公开凭据，不要在仓库中提交实际值。
+
+## Quality
+
+```bash
+npm run lint
+npm run typecheck
+npm run test:unit
+npm run build
+npm run verify:dist
+```
+
+## Deployment
+
+`master` 分支通过 GitHub Actions 发布到 GitHub Pages。首次启用时：
+
+1. 在仓库 `Settings → Pages` 中将 Source 设为 **GitHub Actions**。
+2. 在 `Settings → Secrets and variables → Actions` 中添加 `VITE_AMAP_KEY` 和 `VITE_AMAP_SECURITY_CODE`。
+3. 确保高德 Key 的域名白名单包含 `yunyoujun.github.io`。
 
 ## Intend
 

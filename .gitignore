@@ -2,11 +2,12 @@
 node_modules
 /dist
 yarn.lock
-package-lock.json
 
 # local env files
+.env
 .env.local
 .env.*.local
+!.env.example
 
 # Log files
 npm-debug.log*

@@ -1,47 +1,78 @@
+<script setup lang="ts">
+import {
+  mdiCrosshairsGps,
+  mdiGolf,
+  mdiRadar,
+} from '@mdi/js'
+
+withDefaults(defineProps<{
+  goDisabled?: boolean
+  locationDisabled?: boolean
+}>(), {
+  goDisabled: false,
+  locationDisabled: false,
+})
+
+const emit = defineEmits<{
+  goFarAway: []
+  getAccurateLocation: []
+}>()
+</script>
+
 <template>
-  <v-speed-dial v-model="fab" fixed bottom right>
-    <template v-slot:activator>
-      <v-btn v-model="fab" dark fab color="blue darken-2">
-        <v-icon v-if="fab">close</v-icon>
-        <v-icon v-else>menu</v-icon>
-      </v-btn>
-    </template>
-    <v-btn fab dark small color="green" @click="goFarAway">
-      <v-icon>golf_course</v-icon>
-    </v-btn>
-    <v-btn fab dark small color="indigo" @click="getAccurateLocation">
-      <v-icon>my_location</v-icon>
+  <div
+    class="float-menu"
+    role="group"
+    :aria-label="$t('map.actions.quickActions')"
+  >
+    <v-btn
+      icon
+      color="green"
+      :disabled="goDisabled"
+      :aria-label="$t('map.actions.goFarAway')"
+      :title="$t('map.actions.goFarAway')"
+      @click="emit('goFarAway')"
+    >
+      <v-icon>{{ mdiGolf }}</v-icon>
     </v-btn>
     <v-btn
-      fab
-      dark
-      small
+      icon
+      color="indigo"
+      :disabled="locationDisabled"
+      :aria-label="$t('map.actions.locate')"
+      :title="$t('map.actions.locate')"
+      @click="emit('getAccurateLocation')"
+    >
+      <v-icon>{{ mdiCrosshairsGps }}</v-icon>
+    </v-btn>
+    <v-btn
+      icon
       color="blue-grey"
       href="https://baike.baidu.com/item/旅行者1号探测器"
       target="_blank"
+      rel="noopener noreferrer"
+      :aria-label="$t('map.actions.voyager')"
+      :title="$t('map.actions.voyager')"
     >
-      <v-icon>track_changes</v-icon>
+      <v-icon>{{ mdiRadar }}</v-icon>
     </v-btn>
-  </v-speed-dial>
+  </div>
 </template>
 
-<script>
-export default {
-  data: () => ({
-    fab: false,
-    fling: false,
-    tabs: null,
-    left: false,
-  }),
-  methods: {
-    goFarAway() {
-      this.bus.$emit("goFarAway");
-    },
-    getAccurateLocation() {
-      this.bus.$emit("getAccurateLocation");
-    },
-  },
-};
-</script>
+<style scoped>
+.float-menu {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 
-<style></style>
+@media (max-width: 600px) {
+  .float-menu {
+    right: 16px;
+    bottom: 16px;
+  }
+}
+</style>

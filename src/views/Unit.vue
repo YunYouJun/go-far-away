@@ -1,22 +1,29 @@
+<script setup lang="ts">
+import UnitTransform from '@/components/unit/UnitTransform.vue'
+</script>
+
 <template>
   <div>
-    <h3 class="display-2 text-center mt-5">
+    <h1 class="unit-title text-h4 text-sm-h3 text-center mt-5">
       {{ $t('menu["Unit Transform"]') }}
-    </h3>
+    </h1>
     <v-form>
       <v-container>
-        <unit-transform :label="$t('geographic.latitude.north') + ' °N'" />
-        <unit-transform :label="$t('geographic.longitude.east') + ' °E'" />
+        <UnitTransform
+          kind="latitude"
+          :label="`${$t('geographic.latitude.north')} °N`"
+        />
+        <UnitTransform
+          kind="longitude"
+          :label="`${$t('geographic.longitude.east')} °E`"
+        />
       </v-container>
     </v-form>
   </div>
 </template>
 
-<script>
-import UnitTransform from "@/components/unit/UnitTransform";
-export default {
-  components: {
-    UnitTransform,
-  },
-};
-</script>
+<style scoped>
+.unit-title {
+  overflow-wrap: anywhere;
+}
+</style>
