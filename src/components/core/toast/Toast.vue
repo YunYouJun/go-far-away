@@ -1,68 +1,70 @@
+<script setup lang="ts">
+import { onMounted, shallowRef, watch } from 'vue'
+
+interface ToastOptions {
+  closeable?: boolean
+  color?: string
+  multiLine?: boolean
+  timeout?: number
+}
+
+const props = withDefaults(defineProps<{
+  title?: string
+  text: string
+  type?: string
+  options?: ToastOptions
+}>(), {
+  title: '',
+  type: 'info',
+  options: () => ({}),
+})
+
+const emit = defineEmits<{
+  close: []
+}>()
+
+const open = shallowRef(false)
+const snackbarOptions = {
+  color: props.options.color || props.type,
+  timeout: props.options.timeout ?? 3000,
+  multiLine: props.options.multiLine,
+}
+
+watch(open, (value) => {
+  if (!value)
+    close()
+})
+
+onMounted(() => {
+  open.value = true
+})
+
+function close(): void {
+  window.setTimeout(() => {
+    emit('close')
+  }, 300)
+}
+</script>
+
 <template>
-  <v-snackbar v-model="open" v-bind="options">
-    <div class="ctn">
-      <div v-if="title" class="title mb-2">
+  <v-snackbar
+    v-model="open"
+    v-bind="snackbarOptions"
+    role="status"
+    aria-live="polite"
+  >
+    <div class="toast-content">
+      <div v-if="title" class="text-subtitle-1 mb-2">
         {{ title }}
       </div>
-      <div class="txt">
+      <div>
         {{ text }}
       </div>
     </div>
-    <v-btn v-if="options.closeable" dark flat @click.native="open = false">
-      Close
-    </v-btn>
+    <template v-if="options.closeable" #actions>
+      <v-btn variant="text" @click="open = false">
+        {{ $t('actions.close') }}
+      </v-btn>
+    </template>
   </v-snackbar>
 </template>
-
-<script>
-export default {
-  name: "Toast",
-  props: {
-    title: {
-      type: String,
-      default: "",
-    },
-    text: {
-      type: String,
-      default: "",
-    },
-    type: {
-      type: String,
-      default: "",
-    },
-    options: {
-      type: Object,
-      default: () => {
-        return {};
-      },
-    },
-  },
-  data() {
-    return {
-      open: false,
-    };
-  },
-  watch: {
-    open: function (val) {
-      if (!val) {
-        this.close();
-      }
-    },
-  },
-  beforeMount() {
-    document.querySelector("#app").appendChild(this.$el);
-  },
-  mounted() {
-    this.open = true;
-  },
-  methods: {
-    close() {
-      if (this.open) this.open = false;
-      setTimeout(() => {
-        this.$options.onClose();
-        this.$destroy();
-      }, 700); // wait for close animation
-    },
-  },
-};
-</script>

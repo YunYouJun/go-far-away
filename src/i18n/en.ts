@@ -1,0 +1,109 @@
+export default {
+  'Baidu Map': 'Baidu Map',
+  'Google Map': 'Google Map',
+  'Language': 'Language',
+  'Let\'s go far away!': 'Let\'s go far away!',
+  'The farthest city in China.': 'The farthest city in China.',
+  'Transform': 'Transform',
+  'decimal': 'decimal',
+  'degree': 'degree',
+  'description': 'Go to the farthest place. Then you\'ll always be on your way home.',
+  'input degrees': 'input degrees',
+  'latitude': 'latitude',
+  'longitude': 'longitude',
+  'transform': 'transform',
+  'accessibility': {
+    home: 'Home',
+    language: 'Change language',
+  },
+  'actions': {
+    close: 'Close',
+    retry: 'Try again',
+  },
+  'about': {
+    title: 'About go-far-away',
+    intro: 'Choose your current position and the app will calculate its antipode: the point on Earth directly opposite you.',
+    howTitle: 'How it works',
+    locate: 'Use browser location, search for an address, or enter latitude and longitude.',
+    calculate: 'Select “Go far away” to calculate the opposite point and the approximate surface distance.',
+    explore: 'Explore the destination on AMap and copy its coordinates for your journey.',
+    privacyTitle: 'Location and privacy',
+    privacy: 'Your location is processed in this browser and sent only to AMap for map, search, geocoding, and location services. This site does not operate a server that stores it.',
+    source: 'View source code on GitHub',
+  },
+  'form': {
+    address: {
+      label: 'Your Address',
+      hint: 'Click the location icon to get accurate position',
+      placeholder: 'Search for a city, place, or address',
+    },
+  },
+  'geographic': {
+    latitude: {
+      north: 'North Latitude',
+      south: 'South Latitude',
+    },
+    longitude: {
+      east: 'East Longitude',
+      west: 'West Longitude',
+    },
+  },
+  'menu': {
+    'About': 'About',
+    'Location Search': 'Location Search',
+    'Unit Transform': 'Unit Transform',
+  },
+  'map': {
+    actions: {
+      goFarAway: 'Go far away',
+      locate: 'Use my precise location',
+      quickActions: 'Map quick actions',
+      voyager: 'Learn about Voyager 1',
+    },
+    address: {
+      unavailable: 'No land address is available for this location.',
+    },
+    load: {
+      error: 'The map could not be loaded. Try again in a moment.',
+      key: 'The AMap key is invalid or is not authorized for this domain.',
+      loading: 'Loading the map…',
+      missingKey: 'The map is not configured. Add the AMap key and security code before deploying.',
+      network: 'The map service could not be reached. Check your connection and try again.',
+      quota: 'The map service quota has been used up for today. Please try again later.',
+    },
+    location: {
+      error: 'We could not get your precise location. Check the browser permission and try again.',
+      success: 'Your precise location has been updated.',
+      timeout: 'Location timed out. Check the browser permission and try again.',
+      unavailable: 'Location is unavailable until the map has loaded.',
+    },
+    search: {
+      noResult: 'No matching place was found. Try a more specific address.',
+      selectSuggestion: 'Select an address from the suggestion list.',
+    },
+  },
+  'notFound': {
+    description: 'The page you requested does not exist.',
+    home: 'Back to home',
+    title: 'Page not found',
+  },
+  'seo': {
+    about: 'About',
+    go: 'Find the farthest place',
+    home: 'Go to the farthest place',
+    notFound: 'Page not found',
+    unit: 'Coordinate unit converter',
+  },
+  'unit': {
+    km: 'km',
+    m: 'm',
+    degree: 'Degree',
+    minute: 'Minute',
+    second: 'Second',
+  },
+  'validation': {
+    latitude: 'Latitude must be between -90 and 90.',
+    longitude: 'Longitude must be between -180 and 180.',
+    sexagesimal: 'Minutes and seconds must be at least 0 and less than 60.',
+  },
+}

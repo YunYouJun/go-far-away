@@ -1,0 +1,109 @@
+export default {
+  'Baidu Map': '百度地图',
+  'Google Map': '谷歌地图',
+  'Language': '语言',
+  'Let\'s go far away!': '让我们去远方吧！',
+  'The farthest city in China.': '在中国内最远的城市。',
+  'Transform': '转换',
+  'decimal': '小数',
+  'degree': '度数',
+  'description': '去往这个世界上最遥远的地方。此后，不管你如何前进，都在回家的路上。',
+  'input degrees': '输入度数',
+  'latitude': '纬度',
+  'longitude': '经度',
+  'transform': '转换',
+  'accessibility': {
+    home: '首页',
+    language: '切换语言',
+  },
+  'actions': {
+    close: '关闭',
+    retry: '重试',
+  },
+  'about': {
+    title: '关于「去远方」',
+    intro: '选择你当前所在的位置，应用会计算它在地球另一面的对跖点，也就是地球上与你正相对的位置。',
+    howTitle: '如何使用',
+    locate: '使用浏览器精确定位、搜索地址，或直接输入经纬度。',
+    calculate: '点击“去远方”，计算地球另一面的坐标和近似地表距离。',
+    explore: '在高德地图中查看目的地，也可以记录坐标，作为下一段旅程的起点。',
+    privacyTitle: '定位与隐私',
+    privacy: '定位信息只在当前浏览器内处理，并仅发送给高德地图以完成地图、搜索、地理编码和定位服务。本站没有保存定位信息的服务端。',
+    source: '在 GitHub 查看源代码',
+  },
+  'form': {
+    address: {
+      label: '您的地址',
+      hint: '点击图标获取精确定位地址（需要浏览器支持）',
+      placeholder: '搜索城市、地点或详细地址',
+    },
+  },
+  'geographic': {
+    latitude: {
+      north: '北纬',
+      south: '南纬',
+    },
+    longitude: {
+      east: '东经',
+      west: '西经',
+    },
+  },
+  'menu': {
+    'About': '关于',
+    'Location Search': '定位寻找',
+    'Unit Transform': '单位转换',
+  },
+  'map': {
+    actions: {
+      goFarAway: '去远方',
+      locate: '使用我的精确位置',
+      quickActions: '地图快捷操作',
+      voyager: '了解旅行者 1 号',
+    },
+    address: {
+      unavailable: '这个位置没有可用的陆地地址。',
+    },
+    load: {
+      error: '地图暂时无法加载，请稍后重试。',
+      key: '高德地图 Key 无效，或当前域名未加入白名单。',
+      loading: '正在加载地图…',
+      missingKey: '地图尚未配置，部署前请添加高德 Key 和安全密钥。',
+      network: '无法连接地图服务，请检查网络后重试。',
+      quota: '今日地图服务配额已经用完，请稍后再试。',
+    },
+    location: {
+      error: '无法获取精确位置，请检查浏览器定位权限后重试。',
+      success: '已更新到你的精确位置。',
+      timeout: '定位超时，请检查浏览器定位权限后重试。',
+      unavailable: '地图加载完成前暂时不能定位。',
+    },
+    search: {
+      noResult: '没有找到匹配地点，请尝试更完整的地址。',
+      selectSuggestion: '请从地址建议列表中选择一个地点。',
+    },
+  },
+  'notFound': {
+    description: '你访问的页面不存在或已经被移动。',
+    home: '返回首页',
+    title: '没有找到页面',
+  },
+  'seo': {
+    about: '关于',
+    go: '寻找最远的地方',
+    home: '去往地球上最远的地方',
+    notFound: '页面不存在',
+    unit: '经纬度单位转换',
+  },
+  'unit': {
+    km: '千米',
+    m: '米',
+    degree: '度',
+    minute: '分',
+    second: '秒',
+  },
+  'validation': {
+    latitude: '纬度必须在 -90 到 90 之间。',
+    longitude: '经度必须在 -180 到 180 之间。',
+    sexagesimal: '分和秒必须大于等于 0 且小于 60。',
+  },
+}
