@@ -4,6 +4,9 @@ import process from 'node:process'
 
 const distDirectory = new URL('../dist/', import.meta.url)
 const base = process.env.VITE_BASE_PATH || '/go-far-away/'
+const publicUrl = (process.env.VITE_PUBLIC_URL
+  || (base === '/' ? 'https://gfw.yyj.moe' : 'https://yunyoujun.github.io/go-far-away'))
+  .replace(/\/$/, '')
 const indexHtml = await readFile(new URL('index.html', distDirectory), 'utf8')
 
 function assert(condition, message) {
@@ -15,13 +18,21 @@ assert(
   indexHtml.includes('rel="manifest"'),
   'The production HTML must link to the generated web app manifest.',
 )
-assert(
-  !/["']\/assets\//.test(indexHtml),
-  'Production assets must not point at the domain root.',
-)
+if (base !== '/') {
+  assert(
+    !/["']\/assets\//.test(indexHtml),
+    'Subpath deployment assets must not point at the domain root.',
+  )
+}
 assert(
   indexHtml.includes(`${base}assets/`),
-  `Production assets must use the GitHub Pages base path ${base}.`,
+  `Production assets must use the configured base path ${base}.`,
+)
+assert(
+  indexHtml.includes(`rel="canonical" href="${publicUrl}/"`)
+  && indexHtml.includes(`property="og:url" content="${publicUrl}/"`)
+  && !indexHtml.includes('%PUBLIC_URL%'),
+  `Production metadata must use the configured public URL ${publicUrl}.`,
 )
 const manifest = JSON.parse(
   await readFile(new URL('manifest.webmanifest', distDirectory), 'utf8'),
