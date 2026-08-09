@@ -8,7 +8,7 @@ import vuetify from 'vite-plugin-vuetify'
 
 const githubPagesBase = '/go-far-away/'
 const githubPagesUrl = 'https://yunyoujun.github.io/go-far-away'
-const cloudflarePagesUrl = 'https://gfw.yyj.moe'
+const cloudflarePagesUrl = 'https://go-far-away.yyj.moe'
 
 export default defineConfig(({ command }) => {
   const configuredBase = process.env.VITE_BASE_PATH
