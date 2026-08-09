@@ -5,7 +5,7 @@ import process from 'node:process'
 const distDirectory = new URL('../dist/', import.meta.url)
 const base = process.env.VITE_BASE_PATH || '/go-far-away/'
 const publicUrl = (process.env.VITE_PUBLIC_URL
-  || (base === '/' ? 'https://gfw.yyj.moe' : 'https://yunyoujun.github.io/go-far-away'))
+  || (base === '/' ? 'https://go-far-away.yyj.moe' : 'https://yunyoujun.github.io/go-far-away'))
   .replace(/\/$/, '')
 const indexHtml = await readFile(new URL('index.html', distDirectory), 'utf8')
 

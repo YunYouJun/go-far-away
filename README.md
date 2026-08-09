@@ -4,7 +4,7 @@
 
 > Go the farthest place.
 
-[在线体验](https://gfw.yyj.moe/) · [GitHub Pages 备用站](https://yunyoujun.github.io/go-far-away/)
+[在线体验](https://go-far-away.yyj.moe/) · [GitHub Pages 备用站](https://yunyoujun.github.io/go-far-away/)
 
 定位个人所在地，或通过输入经纬度的方式，计算出世界上距离自己最远的地方。（~~地球不完全是圆的这种细节，就不要在意啦！~~）
 
@@ -74,9 +74,9 @@ npm run verify:dist
 - 生产分支：`master`
 - 构建命令：`npm run build:cloudflare`
 - 输出目录：`dist`
-- 自定义域名：`gfw.yyj.moe`
+- 自定义域名：`go-far-away.yyj.moe`
 
-Cloudflare Pages 的生产与预览环境均需配置 `VITE_AMAP_KEY` 和 `VITE_AMAP_SECURITY_CODE`。高德 Key 的域名白名单应同时包含 `gfw.yyj.moe` 与 `yunyoujun.github.io`。
+Cloudflare Pages 的生产与预览环境均需配置 `VITE_AMAP_KEY` 和 `VITE_AMAP_SECURITY_CODE`。高德 Key 的域名白名单应同时包含 `go-far-away.yyj.moe` 与 `yunyoujun.github.io`。
 
 `master` 分支还会通过 GitHub Actions 发布到 GitHub Pages，作为备用站。首次启用时：
 
