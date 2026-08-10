@@ -852,6 +852,9 @@ function longitudeRule(value: unknown): true | string {
         <v-btn value="china">
           {{ $t('map.scope.china') }}
         </v-btn>
+        <v-btn value="province">
+          {{ $t('map.scope.province') }}
+        </v-btn>
       </v-btn-toggle>
 
       <v-btn
@@ -1031,7 +1034,7 @@ function longitudeRule(value: unknown): true | string {
   position: relative;
   z-index: 4;
   display: grid;
-  grid-template-columns: minmax(270px, 1.2fr) minmax(260px, 0.95fr) minmax(168px, 0.52fr) minmax(150px, 0.45fr) minmax(190px, 0.55fr);
+  grid-template-columns: minmax(270px, 1.2fr) minmax(260px, 0.95fr) minmax(230px, 0.62fr) minmax(150px, 0.45fr) minmax(190px, 0.55fr);
   gap: 0.75rem;
   padding: 1rem clamp(1rem, 2vw, 1.5rem);
   border-bottom: 1px solid rgb(var(--v-theme-on-surface), 0.1);
@@ -1082,7 +1085,7 @@ function longitudeRule(value: unknown): true | string {
 .location-deck__scope :deep(.v-btn) {
   min-width: 0;
   height: 60px;
-  flex: 1 1 50%;
+  flex: 1 1 33.333%;
   padding: 0 0.6rem;
   font-size: 0.86rem;
   font-weight: 600;
@@ -1319,7 +1322,7 @@ function longitudeRule(value: unknown): true | string {
 
 @media (max-width: 1200px) {
   .location-deck {
-    grid-template-columns: minmax(250px, 1.25fr) minmax(260px, 1fr) minmax(160px, 0.55fr) minmax(190px, 0.6fr);
+    grid-template-columns: minmax(220px, 1.25fr) minmax(240px, 1fr) minmax(210px, 0.7fr) minmax(180px, 0.6fr);
   }
 
   .location-deck__locate {
@@ -1335,7 +1338,7 @@ function longitudeRule(value: unknown): true | string {
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 960px) {
   .location-deck {
     grid-template-columns: minmax(250px, 1.15fr) minmax(250px, 1fr);
   }

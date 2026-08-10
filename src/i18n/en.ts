@@ -60,6 +60,7 @@ export default {
     actions: {
       findChinaFarthest: 'Farthest in China',
       findEarthFarthest: 'Global farthest',
+      findProvinceFarthest: 'Farthest in province',
       goFarAway: 'Go far away',
       locate: 'Use my precise location',
       quickActions: 'Map quick actions',
@@ -85,6 +86,10 @@ export default {
       timeout: 'Location timed out. Check the browser permission and try again.',
       unavailable: 'Location is unavailable until the map has loaded.',
     },
+    province: {
+      boundaryError: 'The current province boundary is unavailable. Try again in a moment.',
+      unavailable: 'The current province could not be identified. Make sure the location is in China.',
+    },
     search: {
       noResult: 'No matching place was found. Try a more specific address.',
       selectSuggestion: 'Select an address from the suggestion list.',
@@ -93,6 +98,7 @@ export default {
       title: 'Your antipode',
       chinaTitle: 'Your farthest place in China',
       earthTitle: 'Your antipode',
+      provinceTitle: 'Your farthest place in {province}',
       distance: 'Distance',
       distanceValue: 'About {value} km',
       copy: 'Copy coordinates',
@@ -104,6 +110,7 @@ export default {
       china: 'China',
       earth: 'Global',
       label: 'Farthest-point scope',
+      province: 'Province',
     },
   },
   'notFound': {

@@ -60,6 +60,7 @@ export default {
     actions: {
       findChinaFarthest: '国内最远点',
       findEarthFarthest: '全球最远点',
+      findProvinceFarthest: '省内最远点',
       goFarAway: '去远方',
       locate: '使用我的精确位置',
       quickActions: '地图快捷操作',
@@ -85,6 +86,10 @@ export default {
       timeout: '定位超时，请检查浏览器定位权限后重试。',
       unavailable: '地图加载完成前暂时不能定位。',
     },
+    province: {
+      boundaryError: '暂时无法获取当前省份的行政区边界，请稍后重试。',
+      unavailable: '无法识别当前位置所属的省级行政区，请确认位置位于中国境内。',
+    },
     search: {
       noResult: '没有找到匹配地点，请尝试更完整的地址。',
       selectSuggestion: '请从地址建议列表中选择一个地点。',
@@ -93,6 +98,7 @@ export default {
       title: '你的对跖点',
       chinaTitle: '国内距离你最远的地方',
       earthTitle: '你的对跖点',
+      provinceTitle: '{province}内距离你最远的地方',
       distance: '距离',
       distanceValue: '约 {value} 千米',
       copy: '复制坐标',
@@ -104,6 +110,7 @@ export default {
       china: '国内',
       earth: '全球',
       label: '最远点范围',
+      province: '省内',
     },
   },
   'notFound': {
