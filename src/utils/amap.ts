@@ -65,6 +65,7 @@ export async function loadAmap(): Promise<typeof AMap> {
     version: '1.4.15',
     plugins: [
       'AMap.Autocomplete',
+      'AMap.DistrictSearch',
       'AMap.Geocoder',
       'AMap.Geolocation',
       'AMap.GeometryUtil',

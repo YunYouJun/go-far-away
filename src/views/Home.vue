@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import Welcome from '@/components/Welcome.vue'
+import MapContainer from '@/components/map/MapContainer.vue'
 </script>
 
 <template>
-  <Welcome />
+  <MapContainer />
 </template>

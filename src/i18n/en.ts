@@ -15,6 +15,9 @@ export default {
   'accessibility': {
     home: 'Home',
     language: 'Change language',
+    primaryNavigation: 'Primary navigation',
+    useDarkTheme: 'Use dark theme',
+    useLightTheme: 'Use light theme',
   },
   'actions': {
     close: 'Close',
@@ -55,6 +58,8 @@ export default {
   },
   'map': {
     actions: {
+      findChinaFarthest: 'Farthest in China',
+      findEarthFarthest: 'Global farthest',
       goFarAway: 'Go far away',
       locate: 'Use my precise location',
       quickActions: 'Map quick actions',
@@ -62,6 +67,9 @@ export default {
     },
     address: {
       unavailable: 'No land address is available for this location.',
+    },
+    china: {
+      boundaryError: 'China\'s administrative boundary is unavailable. Try again in a moment.',
     },
     load: {
       error: 'The map could not be loaded. Try again in a moment.',
@@ -80,6 +88,22 @@ export default {
     search: {
       noResult: 'No matching place was found. Try a more specific address.',
       selectSuggestion: 'Select an address from the suggestion list.',
+    },
+    result: {
+      title: 'Your antipode',
+      chinaTitle: 'Your farthest place in China',
+      earthTitle: 'Your antipode',
+      distance: 'Distance',
+      distanceValue: 'About {value} km',
+      copy: 'Copy coordinates',
+      copied: 'Coordinates copied.',
+      copyError: 'Coordinates could not be copied. Check your browser permission.',
+      recalculate: 'Recalculate',
+    },
+    scope: {
+      china: 'China',
+      earth: 'Global',
+      label: 'Farthest-point scope',
     },
   },
   'notFound': {

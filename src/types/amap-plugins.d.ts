@@ -23,8 +23,40 @@ declare namespace AMap {
 
     getAddress(
       lnglat: string,
-      callback: (status: string, result: { regeocode?: { formattedAddress: string } }) => void,
+      callback: (status: string, result: {
+        regeocode?: {
+          addressComponent?: {
+            province?: string
+          }
+          formattedAddress?: string
+        }
+      }) => void,
     ): void
+  }
+
+  interface DistrictSearchResult {
+    districtList?: Array<{
+      adcode?: string
+      boundaries?: LngLat[][]
+      level?: string
+      name?: string
+    }>
+  }
+
+  class DistrictSearch {
+    constructor(options?: {
+      extensions?: 'all' | 'base'
+      level?: 'biz_area' | 'city' | 'country' | 'district' | 'province'
+      showbiz?: boolean
+      subdistrict?: 0 | 1 | 2 | 3
+    })
+
+    search(
+      keywords: string,
+      callback: (status: string, result: DistrictSearchResult | string) => void,
+    ): void
+
+    setLevel(level: 'biz_area' | 'city' | 'country' | 'district' | 'province'): void
   }
 
   class Geolocation {

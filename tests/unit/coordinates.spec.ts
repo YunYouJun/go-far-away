@@ -3,6 +3,10 @@ import {
   decimal2degree,
   degree2decimal,
   getAntipode,
+  getFarthestLocation,
+  getFarthestLocationInRings,
+  getGreatCircleDistance,
+  isLocationInRing,
   isValidLatitude,
   isValidLongitude,
   isValidSexagesimalPart,
@@ -46,6 +50,48 @@ describe('coordinates', () => {
       lng: -58.5263,
     })
     expect(shanghai).toEqual({ lat: 31.2304, lng: 121.4737 })
+  })
+
+  it('calculates great-circle distance in metres', () => {
+    expect(getGreatCircleDistance({ lat: 0, lng: 0 }, { lat: 0, lng: 0 })).toBe(0)
+    expect(getGreatCircleDistance({ lat: 0, lng: 0 }, { lat: 0, lng: 1 })).toBeCloseTo(111_195.08, 0)
+  })
+
+  it('selects the farthest location from a list of candidates', () => {
+    const origin = { lat: 23.1291, lng: 113.2644 }
+    const candidates = [
+      { lat: 31.2304, lng: 121.4737 },
+      { lat: 39.9042, lng: 116.4074 },
+      { lat: 43.8256, lng: 87.6168 },
+    ]
+
+    expect(getFarthestLocation(origin, candidates)).toMatchObject(candidates[2])
+    expect(() => getFarthestLocation(origin, [])).toThrow(RangeError)
+  })
+
+  it('detects whether a location is inside a boundary ring', () => {
+    const ring = [
+      { lat: 20, lng: 100 },
+      { lat: 20, lng: 120 },
+      { lat: 40, lng: 120 },
+      { lat: 40, lng: 100 },
+    ]
+
+    expect(isLocationInRing({ lat: 30, lng: 110 }, ring)).toBe(true)
+    expect(isLocationInRing({ lat: 45, lng: 110 }, ring)).toBe(false)
+  })
+
+  it('uses an in-boundary antipode as the farthest domestic location', () => {
+    const origin = { lat: 31.2304, lng: 121.4737 }
+    const antipode = getAntipode(origin)
+    const ringAroundAntipode = [
+      { lat: antipode.lat - 1, lng: antipode.lng - 1 },
+      { lat: antipode.lat - 1, lng: antipode.lng + 1 },
+      { lat: antipode.lat + 1, lng: antipode.lng + 1 },
+      { lat: antipode.lat + 1, lng: antipode.lng - 1 },
+    ]
+
+    expect(getFarthestLocationInRings(origin, [ringAroundAntipode])).toMatchObject(antipode)
   })
 
   it('validates geographic coordinate boundaries', () => {

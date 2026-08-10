@@ -15,6 +15,9 @@ export default {
   'accessibility': {
     home: '首页',
     language: '切换语言',
+    primaryNavigation: '主要导航',
+    useDarkTheme: '切换到暗色模式',
+    useLightTheme: '切换到亮色模式',
   },
   'actions': {
     close: '关闭',
@@ -55,6 +58,8 @@ export default {
   },
   'map': {
     actions: {
+      findChinaFarthest: '国内最远点',
+      findEarthFarthest: '全球最远点',
       goFarAway: '去远方',
       locate: '使用我的精确位置',
       quickActions: '地图快捷操作',
@@ -62,6 +67,9 @@ export default {
     },
     address: {
       unavailable: '这个位置没有可用的陆地地址。',
+    },
+    china: {
+      boundaryError: '暂时无法获取中国行政区边界，请稍后重试。',
     },
     load: {
       error: '地图暂时无法加载，请稍后重试。',
@@ -80,6 +88,22 @@ export default {
     search: {
       noResult: '没有找到匹配地点，请尝试更完整的地址。',
       selectSuggestion: '请从地址建议列表中选择一个地点。',
+    },
+    result: {
+      title: '你的对跖点',
+      chinaTitle: '国内距离你最远的地方',
+      earthTitle: '你的对跖点',
+      distance: '距离',
+      distanceValue: '约 {value} 千米',
+      copy: '复制坐标',
+      copied: '坐标已复制。',
+      copyError: '无法复制坐标，请检查浏览器权限。',
+      recalculate: '重新计算',
+    },
+    scope: {
+      china: '国内',
+      earth: '全球',
+      label: '最远点范围',
     },
   },
   'notFound': {
