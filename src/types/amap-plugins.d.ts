@@ -22,7 +22,7 @@ declare namespace AMap {
     ): void
 
     getAddress(
-      lnglat: string,
+      lnglat: [number, number] | LngLat,
       callback: (status: string, result: {
         regeocode?: {
           addressComponent?: {
@@ -30,7 +30,7 @@ declare namespace AMap {
           }
           formattedAddress?: string
         }
-      }) => void,
+      } | string) => void,
     ): void
   }
 

@@ -12,7 +12,6 @@ import {
 } from '@mdi/js'
 import {
   computed,
-  nextTick,
   onBeforeUnmount,
   onMounted,
   reactive,
@@ -79,7 +78,7 @@ const map = shallowRef<AMap.Map>()
 const currentMarker = shallowRef<AMap.Marker>()
 const originMarker = shallowRef<AMap.Marker>()
 const destinationMarker = shallowRef<AMap.Marker>()
-const routeLine = shallowRef<AMap.Polyline>()
+const journeyCurve = shallowRef<AMap.Polyline>()
 const autoComplete = shallowRef<AMap.Autocomplete>()
 const districtSearch = shallowRef<AMap.DistrictSearch>()
 const placeSearch = shallowRef<AMap.PlaceSearch>()
@@ -95,7 +94,6 @@ const resultRegionName = shallowRef('')
 const distanceKilometres = shallowRef('')
 const formattedAddress = shallowRef('')
 const mapLoadErrorKey = shallowRef('')
-const routePath = shallowRef('')
 const isMapInitializing = shallowRef(false)
 const isLocating = shallowRef(false)
 const isCalculating = shallowRef(false)
@@ -103,7 +101,6 @@ const isCalculating = shallowRef(false)
 let autocompleteRequestId = 0
 let geolocationRequestId = 0
 let geolocationTimeoutId: number | undefined
-let routeFrameId: number | undefined
 
 const boundaryRingsCache = new Map<string, LngLat[][]>()
 const journeyActionKeys: Record<JourneyScope, string> = {
@@ -139,6 +136,8 @@ const canLocate = computed(() =>
   && !isCalculating.value,
 )
 const isDark = computed(() => theme.global.current.value.dark)
+// AMap JS API 1.4 ignores personalized map styles for English tiles.
+const usesDarkMapFallback = computed(() => isDark.value && mapLang.value === 'en')
 const journeyActionLabel = computed(() => t(journeyActionKeys[journeyScope.value]))
 const resultTitle = computed(() => {
   if (resultScope.value === 'province') {
@@ -172,8 +171,7 @@ watch(() => curPosition.address, (value, _oldValue, onCleanup) => {
 watch(mapLang, value => map.value?.setLang(value))
 watch(isDark, () => {
   applyMapStyle()
-  applyJourneyLineStyle()
-  scheduleRouteOverlay()
+  applyJourneyCurveStyle()
 })
 
 onMounted(() => void initMap())
@@ -182,8 +180,6 @@ onBeforeUnmount(() => {
   geolocationRequestId += 1
   if (geolocationTimeoutId !== undefined)
     window.clearTimeout(geolocationTimeoutId)
-  if (routeFrameId !== undefined)
-    window.cancelAnimationFrame(routeFrameId)
   destroyMap()
 })
 
@@ -232,19 +228,10 @@ async function initMap(): Promise<void> {
       zoomToAccuracy: true,
     })
     mapInstance.addControl(geolocation.value)
-    mapInstance.on('mapmove', scheduleRouteOverlay)
-    mapInstance.on('zoomchange', scheduleRouteOverlay)
-    mapInstance.on('resize', scheduleRouteOverlay)
-
     const center = normalizeLngLat(mapInstance.getCenter())
     setCurrentPosition(center)
     setCurrentMarker(center)
-
-    mapInstance.getCity((result) => {
-      const address = `${result.province || ''}${result.city || ''}${result.district || ''}`
-      formattedAddress.value = address
-      curPosition.address ||= address
-    })
+    void refreshCurrentAddress()
   }
   catch (error) {
     handleMapLoadError(error)
@@ -267,8 +254,7 @@ function destroyMap(): void {
   currentMarker.value = undefined
   originMarker.value = undefined
   destinationMarker.value = undefined
-  routeLine.value = undefined
-  routePath.value = ''
+  journeyCurve.value = undefined
   autoComplete.value = undefined
   districtSearch.value = undefined
   boundaryRingsCache.clear()
@@ -280,10 +266,8 @@ function applyMapStyle(): void {
   map.value?.setMapStyle(isDark.value ? 'amap://styles/darkblue' : 'amap://styles/normal')
 }
 
-function applyJourneyLineStyle(): void {
-  routeLine.value?.setOptions({
-    dirColor: isDark.value ? '#D9E9FF' : '#245B9D',
-    outlineColor: isDark.value ? '#0F1722' : '#FFFFFF',
+function applyJourneyCurveStyle(): void {
+  journeyCurve.value?.setOptions({
     strokeColor: isDark.value ? '#D9E9FF' : '#2D65A8',
   })
 }
@@ -320,9 +304,17 @@ function hasLngLat(location: AutocompleteTip['location']): location is LngLatLik
 function createMarkerContent(kind: 'origin' | 'destination'): HTMLDivElement {
   const element = document.createElement('div')
   element.className = `journey-marker journey-marker--${kind}`
-  const core = document.createElement('span')
-  core.className = 'journey-marker__core'
-  element.append(core)
+
+  const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+  icon.setAttribute('aria-hidden', 'true')
+  icon.setAttribute('class', 'journey-marker__icon')
+  icon.setAttribute('focusable', 'false')
+  icon.setAttribute('viewBox', '0 0 24 24')
+
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path')
+  path.setAttribute('d', mdiMapMarker)
+  icon.append(path)
+  element.append(icon)
   return element
 }
 
@@ -331,11 +323,69 @@ function makeMarker(location: LngLat, kind: 'origin' | 'destination', title = ''
     throw new Error('AMap is unavailable')
 
   return new amapApi.value.Marker({
-    anchor: 'bottom-center',
+    anchor: 'top-left',
     content: createMarkerContent(kind),
+    offset: new amapApi.value.Pixel(-18, -33),
     position: [location.lng, location.lat],
     title,
     zIndex: kind === 'destination' ? 120 : 110,
+  })
+}
+
+function getJourneyCurvePath(start: LngLat, end: LngLat): Array<[number, number]> {
+  let longitudeDelta = end.lng - start.lng
+  if (longitudeDelta > 180)
+    longitudeDelta -= 360
+  else if (longitudeDelta < -180)
+    longitudeDelta += 360
+
+  const latitudeSpan = Math.abs(end.lat - start.lat)
+  const curveHeight = Math.min(18, Math.max(1.5, Math.hypot(longitudeDelta, latitudeSpan) * 0.11))
+  const bendsNorth = Math.max(start.lat, end.lat) + curveHeight <= 75
+  const baseLatitude = bendsNorth
+    ? Math.max(start.lat, end.lat)
+    : Math.min(start.lat, end.lat)
+  const controlLatitude = baseLatitude + (bendsNorth ? curveHeight : -curveHeight)
+  const curveEndLongitude = start.lng + longitudeDelta
+  const controlLongitude1 = start.lng + longitudeDelta * 0.34
+  const controlLongitude2 = start.lng + longitudeDelta * 0.68
+
+  return Array.from({ length: 65 }, (_, index) => {
+    const progress = index / 64
+    const remaining = 1 - progress
+    const startWeight = remaining ** 3
+    const controlWeight1 = 3 * remaining ** 2 * progress
+    const controlWeight2 = 3 * remaining * progress ** 2
+    const endWeight = progress ** 3
+
+    return [
+      startWeight * start.lng
+      + controlWeight1 * controlLongitude1
+      + controlWeight2 * controlLongitude2
+      + endWeight * curveEndLongitude,
+      startWeight * start.lat
+      + controlWeight1 * controlLatitude
+      + controlWeight2 * controlLatitude
+      + endWeight * end.lat,
+    ]
+  })
+}
+
+function makeJourneyCurve(start: LngLat, end: LngLat): AMap.Polyline {
+  if (!amapApi.value)
+    throw new Error('AMap is unavailable')
+
+  return new amapApi.value.Polyline({
+    geodesic: false,
+    isOutline: false,
+    lineCap: 'round',
+    path: getJourneyCurvePath(start, end),
+    strokeColor: isDark.value ? '#D9E9FF' : '#2D65A8',
+    strokeDasharray: [9, 9],
+    strokeOpacity: 0.76,
+    strokeStyle: 'dashed',
+    strokeWeight: 2,
+    zIndex: 90,
   })
 }
 
@@ -372,15 +422,14 @@ function setCurrentPosition(location: LngLat | LngLatLike): void {
 }
 
 function clearJourney(restoreCurrentMarker = true): void {
-  const overlays = [originMarker.value, destinationMarker.value, routeLine.value]
+  const overlays = [originMarker.value, destinationMarker.value, journeyCurve.value]
     .filter((overlay): overlay is AMap.Marker | AMap.Polyline => Boolean(overlay))
   if (overlays.length)
     map.value?.remove(overlays)
 
   originMarker.value = undefined
   destinationMarker.value = undefined
-  routeLine.value = undefined
-  routePath.value = ''
+  journeyCurve.value = undefined
   origin.value = null
   destination.value = null
   resultRegionName.value = ''
@@ -416,12 +465,14 @@ async function getAutoComplete(keywords: string): Promise<void> {
 
 async function getLocationDetails(location: LngLat): Promise<LocationDetails> {
   const AMapApi = await ensureAmap()
-  const lnglat = `${location.lng},${location.lat}`
+  const lnglat: [number, number] = [location.lng, location.lat]
 
   return await new Promise<LocationDetails>((resolve) => {
     const geocoder = new AMapApi.Geocoder()
     geocoder.getAddress(lnglat, (status, result) => {
-      const regeocode = status === 'complete' ? result.regeocode : undefined
+      const regeocode = status === 'complete' && typeof result !== 'string'
+        ? result.regeocode
+        : undefined
 
       resolve({
         address: regeocode?.formattedAddress || t('map.address.unavailable'),
@@ -647,42 +698,25 @@ async function goFarAway(): Promise<void> {
     destination.value = { ...end, address: destinationAddress }
     originMarker.value = makeMarker(start, 'origin', originAddress)
     destinationMarker.value = makeMarker(end, 'destination', destinationAddress)
-    routeLine.value = new amapApi.value.Polyline({
-      borderWeight: 2,
-      dirColor: isDark.value ? '#D9E9FF' : '#245B9D',
-      geodesic: true,
-      isOutline: true,
-      lineCap: 'round',
-      outlineColor: isDark.value ? '#0F1722' : '#FFFFFF',
-      path: [[start.lng, start.lat], [end.lng, end.lat]],
-      showDir: true,
-      strokeColor: isDark.value ? '#D9E9FF' : '#2D65A8',
-      strokeDasharray: [9, 8],
-      strokeOpacity: 0.48,
-      strokeStyle: 'dashed',
-      strokeWeight: 2,
-      zIndex: 90,
-    })
+    journeyCurve.value = makeJourneyCurve(start, end)
 
     if (currentMarker.value) {
       map.value.remove(currentMarker.value)
       currentMarker.value = undefined
     }
 
-    map.value.add([routeLine.value, originMarker.value, destinationMarker.value])
+    map.value.add([journeyCurve.value, originMarker.value, destinationMarker.value])
     distanceKilometres.value = new Intl.NumberFormat(locale.value, {
       maximumFractionDigits: 2,
       minimumFractionDigits: 2,
     }).format(distanceMetres / 1000)
 
     map.value.setFitView(
-      [routeLine.value, originMarker.value, destinationMarker.value],
+      [journeyCurve.value, originMarker.value, destinationMarker.value],
       true,
       window.innerWidth <= 720 ? [48, 36, 120, 36] : [72, 72, 72, 72],
       4,
     )
-    await nextTick()
-    scheduleRouteOverlay()
   }
   catch (error) {
     clearJourney(true)
@@ -699,36 +733,6 @@ async function goFarAway(): Promise<void> {
   finally {
     isCalculating.value = false
   }
-}
-
-function scheduleRouteOverlay(): void {
-  if (routeFrameId !== undefined)
-    window.cancelAnimationFrame(routeFrameId)
-
-  routeFrameId = window.requestAnimationFrame(() => {
-    routeFrameId = undefined
-    updateRouteOverlay()
-  })
-}
-
-function updateRouteOverlay(): void {
-  if (!map.value || !origin.value || !destination.value || !mapElement.value) {
-    routePath.value = ''
-    return
-  }
-
-  const start = map.value.lngLatToContainer([origin.value.lng, origin.value.lat])
-  const end = map.value.lngLatToContainer([destination.value.lng, destination.value.lat])
-  const x1 = start.getX()
-  const y1 = start.getY()
-  const x2 = end.getX()
-  const y2 = end.getY()
-  const distance = Math.hypot(x2 - x1, y2 - y1)
-  const bend = Math.min(170, Math.max(56, distance * 0.24))
-  const midpointY = Math.min(y1, y2) - bend
-  const controlX1 = x1 + (x2 - x1) * 0.34
-  const controlX2 = x1 + (x2 - x1) * 0.68
-  routePath.value = `M ${x1} ${y1} C ${controlX1} ${midpointY}, ${controlX2} ${midpointY}, ${x2} ${y2}`
 }
 
 async function copyDestination(): Promise<void> {
@@ -888,16 +892,11 @@ function longitudeRule(value: unknown): true | string {
     </v-form>
 
     <div class="map-stage">
-      <div ref="mapElement" class="amap-wrapper" />
-
-      <svg
-        v-if="routePath"
-        class="journey-line"
-        aria-hidden="true"
-      >
-        <path class="journey-line__halo" :d="routePath" />
-        <path class="journey-line__path" :d="routePath" />
-      </svg>
+      <div
+        ref="mapElement"
+        class="amap-wrapper"
+        :class="{ 'amap-wrapper--dark-fallback': usesDarkMapFallback }"
+      />
 
       <v-btn
         class="map-stage__locate"
@@ -1035,6 +1034,7 @@ function longitudeRule(value: unknown): true | string {
   z-index: 4;
   display: grid;
   grid-template-columns: minmax(270px, 1.2fr) minmax(260px, 0.95fr) minmax(230px, 0.62fr) minmax(150px, 0.45fr) minmax(190px, 0.55fr);
+  align-items: start;
   gap: 0.75rem;
   padding: 1rem clamp(1rem, 2vw, 1.5rem);
   border-bottom: 1px solid rgb(var(--v-theme-on-surface), 0.1);
@@ -1127,6 +1127,14 @@ function longitudeRule(value: unknown): true | string {
   min-height: 390px;
 }
 
+.amap-wrapper--dark-fallback {
+  background: #071426;
+}
+
+.amap-wrapper--dark-fallback :deep(.amap-layer > img) {
+  filter: invert(1) hue-rotate(180deg) brightness(0.72) saturate(0.8);
+}
+
 .map-stage__locate {
   position: absolute;
   z-index: 5;
@@ -1156,34 +1164,6 @@ function longitudeRule(value: unknown): true | string {
   width: 100%;
   max-width: none;
   border-radius: 0;
-}
-
-.journey-line {
-  position: absolute;
-  z-index: 4;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  pointer-events: none;
-}
-
-.journey-line__halo,
-.journey-line__path {
-  fill: none;
-  stroke-linecap: round;
-}
-
-.journey-line__halo {
-  stroke: rgb(var(--v-theme-surface), 0.88);
-  stroke-width: 5;
-}
-
-.journey-line__path {
-  stroke: rgb(var(--v-theme-secondary));
-  stroke-width: 2;
-  stroke-dasharray: 9 9;
-  animation: journey-flow 1.15s linear infinite;
 }
 
 .result-rail {
@@ -1276,31 +1256,34 @@ function longitudeRule(value: unknown): true | string {
 }
 
 :deep(.journey-marker) {
-  position: relative;
-  width: 28px;
+  width: 36px;
   height: 36px;
-  border: 3px solid #FFFFFF;
-  border-radius: 18px 18px 18px 4px;
-  box-shadow: 0 6px 15px rgb(0, 0, 0, 0.28);
-  transform: rotate(-45deg);
+  color: #3B82E3;
+  filter: drop-shadow(0 6px 8px rgb(0, 0, 0, 0.3));
 }
 
 :deep(.journey-marker--origin) {
-  background: #3B82E3;
+  color: #3B82E3;
 }
 
 :deep(.journey-marker--destination) {
-  background: #68A94B;
+  color: #68A94B;
 }
 
-:deep(.journey-marker__core) {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #FFFFFF;
+:deep(.journey-marker__icon) {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+:deep(.journey-marker__icon path) {
+  fill: currentcolor;
+  stroke: #FFFFFF;
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+  paint-order: stroke fill;
+  vector-effect: non-scaling-stroke;
 }
 
 .result-rail-enter-active,
@@ -1312,12 +1295,6 @@ function longitudeRule(value: unknown): true | string {
 .result-rail-leave-to {
   opacity: 0;
   transform: translateY(14px);
-}
-
-@keyframes journey-flow {
-  to {
-    stroke-dashoffset: -36;
-  }
 }
 
 @media (max-width: 1200px) {
@@ -1495,10 +1472,6 @@ function longitudeRule(value: unknown): true | string {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .journey-line__path {
-    animation: none;
-  }
-
   .result-rail-enter-active,
   .result-rail-leave-active {
     transition: none;
